@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Georgy Nikitin](https://up.htmlacademy.ru/javascript/19/user/1118677).
-* Наставник: [Сергей Рубец]((https://up.htmlacademy.ru/javascript/19/user/1118677).
+* Наставник: [Сергей Рубец](https://up.htmlacademy.ru/javascript/19/user/41580).
 
 ---
 
