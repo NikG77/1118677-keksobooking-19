@@ -9,7 +9,6 @@ var checkin = ['12:00', '13:00', '14:00'];
 var checkout = ['12:00', '13:00', '14:00'];
 var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var addressData = [];
 
 var similarPinTemplate = document.querySelector('#pin').content;
 var similarPinElement = document.querySelector('.map').querySelector('.map__pins');
@@ -22,12 +21,12 @@ var receiveRandomRange = function (minNumber, maxNumber) {
   return Math.round(Math.random() * (maxNumber - minNumber) + minNumber);
 };
 
-var receiveRandomOneArr = function (arr) {
+var getRandomElement = function (arr) {
   var numberRandom = receiveRandom(arr.length - 1);
   return arr[numberRandom];
 };
 
-var receiveRandomManyArr = function (arr) {
+var getRandomArray = function (arr) {
   var numberRandom = receiveRandom(arr.length);
   var arrClon = arr.slice();
   var arrNew = [];
@@ -41,9 +40,10 @@ var receiveRandomManyArr = function (arr) {
   return arrNew;
 };
 
-var createAddressData = function () {
-  for (var i = 0; i < NUMBER_DATA; i++) {
-    addressData[i] = {
+var createAddressData = function (number) {
+  var anyAddressData = [];
+  for (var i = 0; i < number; i++) {
+    anyAddressData[i] = {
       author: {
         avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
@@ -51,14 +51,14 @@ var createAddressData = function () {
         title: 'Заголовок предложения',
         address: '600, 350',
         price: receiveRandom(100),
-        type: receiveRandomOneArr(type),
+        type: getRandomElement(type),
         rooms: receiveRandom(10),
         guests: receiveRandom(10),
-        checkin: receiveRandomOneArr(checkin),
-        checkout: receiveRandomOneArr(checkout),
-        features: receiveRandomManyArr(features),
+        checkin: getRandomElement(checkin),
+        checkout: getRandomElement(checkout),
+        features: getRandomArray(features),
         description: 'строка с описанием',
-        photos: receiveRandomManyArr(photos)
+        photos: getRandomArray(photos)
       },
       location: {
         x: receiveRandom(1200),
@@ -66,6 +66,7 @@ var createAddressData = function () {
       }
     };
   }
+  return anyAddressData;
 };
 
 var renderPin = function (address) {
@@ -86,6 +87,6 @@ var renderPins = function () {
   similarPinElement.appendChild(fragment);
 };
 
-createAddressData();
+var addressData = createAddressData(NUMBER_DATA);
 document.querySelector('.map').classList.remove('map--faded');
 renderPins();
