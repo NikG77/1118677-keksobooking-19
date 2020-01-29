@@ -13,6 +13,12 @@ var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.g
 var similarPinTemplate = document.querySelector('#pin').content;
 var similarPinElement = document.querySelector('.map').querySelector('.map__pins');
 
+var similarCardTemplate = document.querySelector('#card').content;
+/*
+var similarCardElement = document.querySelector('.map').querySelector('.map__pins');
+*/
+
+
 var receiveRandom = function (maxNumber) {
   return Math.round(Math.random() * maxNumber);
 };
@@ -50,7 +56,7 @@ var createAddressData = function (number) {
       offer: {
         title: 'Заголовок предложения',
         address: '600, 350',
-        price: receiveRandom(100),
+        price: receiveRandomRange(1000, 9999),
         type: getRandomElement(type),
         rooms: receiveRandom(10),
         guests: receiveRandom(10),
@@ -87,6 +93,29 @@ var renderPins = function () {
   similarPinElement.appendChild(fragment);
 };
 
+var renderCard = function (addressObject) {
+  var addressElement = similarCardTemplate.cloneNode(true);
+
+  addressElement.querySelector('.popup__title').textContent = addressObject.offer.title;
+  addressElement.querySelector('.popup__text--address').textContent = addressObject.offer.address;
+  addressElement.querySelector('.popup__text--price').textContent = addressObject.offer.price + '₽/ночь';
+  // сделать функцию перевода
+  addressElement.querySelector('.popup__type').textContent = addressObject.offer.type;
+  addressElement.querySelector('.popup__text--capacity').textContent = addressObject.offer.rooms + ' комнаты для ' + addressObject.offer.guests + ' гостей';
+  addressElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + addressObject.offer.checkin + ', выезд до ' + addressObject.offer.checkout;
+  // не переносит только добавляет список в первый элемент
+  addressElement.querySelector('.popup__feature').textContent = addressObject.offer.features;
+  addressElement.querySelector('.popup__description').textContent = addressObject.offer.description;
+  // записывается все в одну src
+  addressElement.querySelector('.popup__photos').querySelector('img').src = addressObject.offer.photos;
+  addressElement.querySelector('.popup__avatar').src = addressObject.author.avatar;
+
+  return addressElement;
+};
+
 var addressData = createAddressData(NUMBER_DATA);
 document.querySelector('.map').classList.remove('map--faded');
 renderPins();
+
+var addressCard = renderCard(addressData[0]);
+console.log(addressCard);
