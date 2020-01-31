@@ -3,6 +3,8 @@
 var NUMBER_DATA = 8;
 var PIN_SIZE_X = 40;
 var PIN_SIZE_Y = 40;
+var PRICE_MIN = 0;
+var PRICE_MAX = 1000;
 
 var type = ['palace', 'flat', 'house', 'bungalo'];
 var typeRu = ['Дворец', 'Квартира', 'Дом', 'Бунгало'];
@@ -18,32 +20,26 @@ var similarCardTemplate = document.querySelector('#card').content;
 
 var similarCardElement = document.querySelector('.map');
 
-
-// Выдает рандомное число в диапозоне от 0 до maxNumber
-var receiveRandom = function (maxNumber) {
-  return Math.round(Math.random() * maxNumber);
-};
-
 // Выдает рандомное число в диапозоне от minNumber до maxNumber
-var receiveRandomRange = function (minNumber, maxNumber) {
+var getRandomRange = function (minNumber, maxNumber) {
   return Math.round(Math.random() * (maxNumber - minNumber) + minNumber);
 };
 
 // Выдает на основе входящего массива один рандомный элемент массива
 var getRandomElement = function (arr) {
-  var numberRandom = receiveRandom(arr.length - 1);
+  var numberRandom = getRandomRange(0, arr.length - 1);
   return arr[numberRandom];
 };
 
 // Выдает на основе входящего массива массив с рандомным кол-вом элементов
 var getRandomArray = function (arr) {
-  var numberRandom = receiveRandom(arr.length);
+  var numberRandom = getRandomRange(0, arr.length);
   var arrClon = arr.slice();
   var arrNew = [];
   var numberArrRandom;
 
   for (var j = 0; j < numberRandom; j++) {
-    numberArrRandom = receiveRandom(arrClon.length - 1);
+    numberArrRandom = getRandomRange(0, arrClon.length - 1);
     arrNew[j] = arrClon[numberArrRandom];
     arrClon.splice(numberArrRandom, 1);
   }
@@ -61,10 +57,10 @@ var createAddressData = function (number) {
       offer: {
         title: 'Заголовок предложения',
         address: '600, 350',
-        price: receiveRandomRange(1000, 9999),
+        price: getRandomRange(PRICE_MIN, PRICE_MAX),
         type: getRandomElement(type),
-        rooms: receiveRandom(10),
-        guests: receiveRandom(10),
+        rooms: getRandomRange(0, 10),
+        guests: getRandomRange(0, 10),
         checkin: getRandomElement(checkin),
         checkout: getRandomElement(checkout),
         features: getRandomArray(features),
@@ -72,8 +68,8 @@ var createAddressData = function (number) {
         photos: getRandomArray(photos)
       },
       location: {
-        x: receiveRandom(1200),
-        y: receiveRandomRange(130, 650)
+        x: getRandomRange(0, 1200),
+        y: getRandomRange(130, 650)
       }
     };
   }
@@ -81,7 +77,7 @@ var createAddressData = function (number) {
 };
 
 // Создает метку на основе шаблона #pin по полученному объекту
-var renderPin = function (address) {
+var createPin = function (address) {
   var addressElement = similarPinTemplate.cloneNode(true);
   var locationUnion = 'left: ' + (address.location.x - PIN_SIZE_X / 2) + 'px; ' + 'top: ' + (address.location.y - PIN_SIZE_Y) + 'px; ';
 
@@ -95,7 +91,7 @@ var renderPin = function (address) {
 var renderPins = function () {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < addressData.length; i++) {
-    fragment.appendChild(renderPin(addressData[i]));
+    fragment.appendChild(createPin(addressData[i]));
   }
   similarPinElement.appendChild(fragment);
 };
@@ -111,7 +107,7 @@ var translateType = function (x) {
 };
 
 // Удаляет список дочерние элементы list и cоздает на основе входящего массива arr новый список
-var renderFeature = function (arr, list) {
+var createFeature = function (arr, list) {
   list.innerHTML = '';
   for (var i = 0; i < arr.length; i++) {
     var newElementLi = document.createElement('li');
@@ -122,7 +118,7 @@ var renderFeature = function (arr, list) {
 };
 
 // Создает список фотографий из полученного массива
-var renderPhotos = function (arr, photosTemplate) {
+var createPhotos = function (arr, photosTemplate) {
   photosTemplate.querySelector('img').src = arr[0];
   for (var i = 1; i < arr.length; i++) {
     var newElementImg = photosTemplate.querySelector('img').cloneNode(true);
@@ -132,7 +128,7 @@ var renderPhotos = function (arr, photosTemplate) {
 };
 
 // Создает карточку адреса по шаблону #card по полученному объекту
-var renderCard = function (addressObject) {
+var createCard = function (addressObject) {
   var addressElement = similarCardTemplate.cloneNode(true);
   var list = addressElement.querySelector('.popup__features');
   var photosTemplate = addressElement.querySelector('.popup__photos');
@@ -147,13 +143,13 @@ var renderCard = function (addressObject) {
   addressElement.querySelector('.popup__avatar').src = addressObject.author.avatar;
 
   if (addressObject.offer.features[0]) {
-    renderFeature(addressObject.offer.features, list);
+    createFeature(addressObject.offer.features, list);
   } else {
     addressElement.querySelector('.popup__features').remove();
   }
 
   if (addressObject.offer.photos[0]) {
-    renderPhotos(addressObject.offer.photos, photosTemplate);
+    createPhotos(addressObject.offer.photos, photosTemplate);
   } else {
     addressElement.querySelector('.popup__photos').remove();
   }
@@ -165,7 +161,7 @@ var renderCard = function (addressObject) {
 var renderCards = function () {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < 1; i++) {
-    fragment.appendChild(renderCard(addressData[i]));
+    fragment.appendChild(createCard(addressData[i]));
   }
   similarCardElement.insertBefore(fragment, similarCardElement.querySelector('.map__filters-container'));
 };
