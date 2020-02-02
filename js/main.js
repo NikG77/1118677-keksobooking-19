@@ -18,7 +18,7 @@ var similarPinElement = document.querySelector('.map').querySelector('.map__pins
 
 var similarCardTemplate = document.querySelector('#card').content;
 
-var similarCardElement = document.querySelector('.map');
+var map = document.querySelector('.map');
 
 // Выдает рандомное число в диапозоне от minNumber до maxNumber
 var getRandomRange = function (minNumber, maxNumber) {
@@ -163,15 +163,61 @@ var renderCards = function () {
   for (var i = 0; i < 1; i++) {
     fragment.appendChild(createCard(addressData[i]));
   }
-  similarCardElement.insertBefore(fragment, similarCardElement.querySelector('.map__filters-container'));
+  map.insertBefore(fragment, map.querySelector('.map__filters-container'));
 };
 
 var addressData = createAddressData(NUMBER_DATA);
-document.querySelector('.map').classList.remove('map--faded');
+
+// document.querySelector('.map').classList.remove('map--faded');
 renderPins();
+// метод отрисовки карточки можно закомментировать до тех пор, пока вы не доберётесь до 2-й части задания, чтобы eslint не ругался.
+// renderCards();
 
-renderCards();
+// Задание 4.2
 
-// var addressCard = renderCard(addressData[0]);
-// console.log(addressData[0]);
-// console.log(addressCard);
+var KEY = {
+  ESC: 'Escape',
+  ENTER: 'Enter'
+};
+
+var form = document.querySelector('form');
+var buttonMap = map.querySelector('.map__pin');
+
+var openMapPin = function () {
+  map.classList.remove('map--faded');
+};
+
+// Добавляет в form всем  input и select disabled
+var disableInputForm = function () {
+  var formInput = form.querySelectorAll('input');
+  for (var i = 0; i < formInput.length; i++) {
+    formInput[i].disabled = true;
+  }
+
+  var formSelect = form.querySelectorAll('select');
+  for (var i = 0; i < formSelect.length; i++) {
+    formSelect[i].disabled = true;
+  }
+};
+
+disableInputForm();
+
+// Активирует метку при нажатие основной кнопки мыши
+buttonMap.addEventListener('mousedown', function (evt) {
+  if (evt.button === 0) {
+    openMapPin();
+  }
+});
+// Активирует метку при нажатие Enter
+buttonMap.addEventListener('keydown', function (evt) {
+  if (evt.key === KEY.ENTER) {
+    openMapPin();
+  }
+});
+
+var locationX = buttonMap.style.left;
+var locationY = buttonMap.style.top;
+
+buttonMap.querySelector('textPath').textContent += ' ' + locationX + ', ' + locationY;
+console.log('locationX=', locationX, 'locationY=', locationY);
+
