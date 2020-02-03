@@ -97,13 +97,13 @@ var renderPins = function () {
 };
 
 // Переводит тип адреса с английского на русский
-var translateType = function (x) {
+var translateType = function (translateWord) {
   for (var i = 0; i < type.length; i++) {
-    if (type[i] === x) {
+    if (type[i] === translateWord) {
       return typeRu[i];
     }
   }
-  return x;
+  return translateWord;
 };
 
 // Удаляет список дочерние элементы list и cоздает на основе входящего массива arr новый список
@@ -167,11 +167,9 @@ var renderCards = function () {
 };
 
 var addressData = createAddressData(NUMBER_DATA);
-
-// document.querySelector('.map').classList.remove('map--faded');
 renderPins();
 // метод отрисовки карточки можно закомментировать до тех пор, пока вы не доберётесь до 2-й части задания, чтобы eslint не ругался.
-// renderCards();
+renderCards();
 
 // Задание 4.2
 
@@ -179,28 +177,66 @@ var KEY = {
   ESC: 'Escape',
   ENTER: 'Enter'
 };
+var MAIN_PIN_SIZE_X = 65;
+var MAIN_PIN_SIZE_Y = 65;
+var MAIN_POINTER_Y = 22;
 
-var form = document.querySelector('form');
+var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN_SIZE_X / 2);
+var locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN_SIZE_Y / 2);
+
+var form = document.querySelector('.ad-form');
 var buttonMap = map.querySelector('.map__pin');
 
+var formInput = form.querySelectorAll('input');
+var formSelect = form.querySelectorAll('select');
+var formTextarea = form.querySelector('textarea');
+var formButton = form.querySelector('.ad-form__submit');
+
+// Активизирует карту, показывает обновленный адрес со сдвигом на метку
 var openMapPin = function () {
   map.classList.remove('map--faded');
+  activateInputForm();
+  locationY += Math.round(MAIN_PIN_SIZE_Y / 2 + MAIN_POINTER_Y);
+  showAddress();
 };
 
-// Добавляет в form всем  input и select disabled
+// Добавляет в 'ad-form' всем  input и select disabled
 var disableInputForm = function () {
-  var formInput = form.querySelectorAll('input');
   for (var i = 0; i < formInput.length; i++) {
     formInput[i].disabled = true;
   }
 
-  var formSelect = form.querySelectorAll('select');
-  for (var i = 0; i < formSelect.length; i++) {
-    formSelect[i].disabled = true;
+  for (var j = 0; j < formSelect.length; j++) {
+    formSelect[j].disabled = true;
   }
+
+  formTextarea.disabled = true;
+  formButton.disabled = true;
+};
+
+// Удаляет из 'ad-form' input и select disabled
+var activateInputForm = function () {
+  for (var i = 0; i < formInput.length; i++) {
+    formInput[i].disabled = false;
+  }
+
+  for (var j = 0; j < formSelect.length; j++) {
+    formSelect[j].disabled = false;
+  }
+
+  formTextarea.disabled = false;
+  formButton.disabled = false;
+};
+
+// Показывает адрес текущей метки
+var showAddress = function () {
+  form.querySelector('#address').value = locationX + ', ' + locationY;
 };
 
 disableInputForm();
+showAddress();
+// временно для удобства
+openMapPin();
 
 // Активирует метку при нажатие основной кнопки мыши
 buttonMap.addEventListener('mousedown', function (evt) {
@@ -208,6 +244,7 @@ buttonMap.addEventListener('mousedown', function (evt) {
     openMapPin();
   }
 });
+
 // Активирует метку при нажатие Enter
 buttonMap.addEventListener('keydown', function (evt) {
   if (evt.key === KEY.ENTER) {
@@ -215,9 +252,40 @@ buttonMap.addEventListener('keydown', function (evt) {
   }
 });
 
-var locationX = buttonMap.style.left;
-var locationY = buttonMap.style.top;
+// временные данные для тестового ввода
+form.querySelector('#title').value = 'Важно!!! Милая, уютная квартирка в центре Токио';
+form.querySelector('#price').value = 6000;
 
-buttonMap.querySelector('textPath').textContent += ' ' + locationX + ', ' + locationY;
-console.log('locationX=', locationX, 'locationY=', locationY);
+var roomNumber = form.querySelector('#room_number');
+var capacityPeople = form.querySelector('#capacity');
+
+
+/* Пытался повесить слушатель на форму на submit но ничего не получилось
+form.addEventListener('submit', function (evt) {
+  var target = evt.target.roomNumber;
+  if (target.value !== capacityPeople.value) {
+    target.setCustomValidity('1 комната — «для 1 гостя»');
+  } else {
+    target.setCustomValidity('');
+  }
+});
+*/
+
+// Работает корректно только если последним меняется кол-во комнат
+roomNumber.addEventListener('change', function (evt) {
+  var target = evt.target;
+  if (+target.value === 1 && +target.value !== +capacityPeople.value) {
+    target.setCustomValidity('Допустимо 1 комната — «для 1 гостя»');
+  } else if (+target.value === 2 && (+target.value < +capacityPeople.value || +capacityPeople.value === 0)) {
+    target.setCustomValidity('Допустимо 2 комнаты — «для 2 гостей» или «для 1 гостя»');
+  } else if (+target.value === 3 && (+target.value < +capacityPeople.value || +capacityPeople.value === 0)) {
+    target.setCustomValidity('Допустимо 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
+  } else if (+target.value === 100 && +capacityPeople.value !== 0) {
+    target.setCustomValidity('Допустимо 100 комнат — «не для гостей»');
+  } else {
+    target.setCustomValidity('');
+  }
+  console.log(target.value, typeof (target.value), typeof (+target.value));
+  console.log(capacityPeople.value, typeof (capacityPeople.value));
+});
 
