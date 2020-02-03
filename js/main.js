@@ -285,7 +285,7 @@ roomNumber.addEventListener('change', function (evt) {
   } else {
     target.setCustomValidity('');
   }
-  console.log(target.value, typeof (target.value), typeof (+target.value));
-  console.log(capacityPeople.value, typeof (capacityPeople.value));
+  // console.log(target.value, typeof (target.value), typeof (+target.value));
+  // console.log(capacityPeople.value, typeof (capacityPeople.value));
 });
 
