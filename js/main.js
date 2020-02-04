@@ -1,6 +1,7 @@
 'use strict';
 
-var NUMBER_DATA = 8;
+// Уменьшил с 8 до 0 чтоб eslint не ругался
+var NUMBER_DATA = 0;
 var PIN_SIZE_X = 40;
 var PIN_SIZE_Y = 40;
 var PRICE_MIN = 0;
@@ -167,9 +168,9 @@ var renderCards = function () {
 };
 
 var addressData = createAddressData(NUMBER_DATA);
-// renderPins();
+renderPins();
 // метод отрисовки карточки можно закомментировать до тех пор, пока вы не доберётесь до 2-й части задания, чтобы eslint не ругался.
-// renderCards();
+renderCards();
 
 // Задание 4.2
 
@@ -196,8 +197,10 @@ var roomNumber = form.querySelector('#room_number');
 var capacityPeople = form.querySelector('#capacity');
 
 // Активизирует карту, показывает обновленный адрес со сдвигом на метку
-var openMapPin = function () {
+var openMap = function () {
   map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
+
   activateInputForm();
   locationY += Math.round(MAIN_PIN_SIZE_Y / 2 + MAIN_POINTER_Y);
   showAddress();
@@ -242,14 +245,14 @@ disableInputForm();
 // Активирует метку при нажатие основной кнопки мыши
 buttonMap.addEventListener('mousedown', function (evt) {
   if (evt.button === 0) {
-    openMapPin();
+    openMap();
   }
 });
 
 // Активирует метку при нажатие Enter
 buttonMap.addEventListener('keydown', function (evt) {
   if (evt.key === KEY.ENTER) {
-    openMapPin();
+    openMap();
   }
 });
 
