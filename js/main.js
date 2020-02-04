@@ -272,6 +272,7 @@ form.addEventListener('submit', function (evt) {
 */
 
 // Работает корректно только если последним меняется кол-во комнат
+/*
 roomNumber.addEventListener('change', function (evt) {
   var target = evt.target;
   if (+target.value === 1 && +target.value !== +capacityPeople.value) {
@@ -285,7 +286,22 @@ roomNumber.addEventListener('change', function (evt) {
   } else {
     target.setCustomValidity('');
   }
-  // console.log(target.value, typeof (target.value), typeof (+target.value));
+});
+*/
+
+form.addEventListener('submit', function () {
+  if (+roomNumber.value === 1 && +roomNumber.value !== +capacityPeople.value) {
+    roomNumber.setCustomValidity('Допустимо 1 комната — «для 1 гостя»');
+  } else if (+roomNumber.value === 2 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === 0)) {
+    roomNumber.setCustomValidity('Допустимо 2 комнаты — «для 2 гостей» или «для 1 гостя»');
+  } else if (+roomNumber.value === 3 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === 0)) {
+    roomNumber.setCustomValidity('Допустимо 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
+  } else if (+roomNumber.value === 100 && +capacityPeople.value !== 0) {
+    roomNumber.setCustomValidity('Допустимо 100 комнат — «не для гостей»');
+  } else {
+    roomNumber.setCustomValidity('');
+  }
+  // console.log(roomNumber.value, typeof (roomNumber.value), typeof (+roomNumber.value));
   // console.log(capacityPeople.value, typeof (capacityPeople.value));
 });
 
