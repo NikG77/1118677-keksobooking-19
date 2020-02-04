@@ -190,7 +190,10 @@ var buttonMap = map.querySelector('.map__pin');
 var formInput = form.querySelectorAll('input');
 var formSelect = form.querySelectorAll('select');
 var formTextarea = form.querySelector('textarea');
-var formButton = form.querySelector('.ad-form__submit');
+var formButton = form.querySelectorAll('.ad-form__submit');
+
+var roomNumber = form.querySelector('#room_number');
+var capacityPeople = form.querySelector('#capacity');
 
 // Активизирует карту, показывает обновленный адрес со сдвигом на метку
 var openMapPin = function () {
@@ -202,30 +205,30 @@ var openMapPin = function () {
 
 // Добавляет в 'ad-form' всем  input и select disabled
 var disableInputForm = function () {
-  for (var i = 0; i < formInput.length; i++) {
-    formInput[i].disabled = true;
-  }
+  disablePartForm(formInput);
+  disablePartForm(formSelect);
+  disablePartForm(formTextarea);
+  disablePartForm(formButton);
+};
 
-  for (var j = 0; j < formSelect.length; j++) {
-    formSelect[j].disabled = true;
+var disablePartForm = function (partForm) {
+  for (var i = 0; i < partForm.length; i++) {
+    partForm[i].disabled = true;
   }
-
-  formTextarea.disabled = true;
-  formButton.disabled = true;
 };
 
 // Удаляет из 'ad-form' input и select disabled
 var activateInputForm = function () {
-  for (var i = 0; i < formInput.length; i++) {
-    formInput[i].disabled = false;
-  }
+  activatePartForm(formInput);
+  activatePartForm(formSelect);
+  activatePartForm(formTextarea);
+  activatePartForm(formButton);
+};
 
-  for (var j = 0; j < formSelect.length; j++) {
-    formSelect[j].disabled = false;
+var activatePartForm = function (partForm) {
+  for (var i = 0; i < partForm.length; i++) {
+    partForm[i].disabled = false;
   }
-
-  formTextarea.disabled = false;
-  formButton.disabled = false;
 };
 
 // Показывает адрес текущей метки
@@ -233,9 +236,8 @@ var showAddress = function () {
   form.querySelector('#address').value = locationX + ', ' + locationY;
 };
 
-disableInputForm();
 showAddress();
-
+disableInputForm();
 
 // Активирует метку при нажатие основной кнопки мыши
 buttonMap.addEventListener('mousedown', function (evt) {
@@ -255,40 +257,8 @@ buttonMap.addEventListener('keydown', function (evt) {
 form.querySelector('#title').value = 'Важно!!! Милая, уютная квартирка в центре Токио';
 form.querySelector('#price').value = 6000;
 
-var roomNumber = form.querySelector('#room_number');
-var capacityPeople = form.querySelector('#capacity');
-
-
-/* Пытался повесить слушатель на форму на submit но ничего не получилось
-form.addEventListener('submit', function (evt) {
-  var target = evt.target.roomNumber;
-  if (target.value !== capacityPeople.value) {
-    target.setCustomValidity('1 комната — «для 1 гостя»');
-  } else {
-    target.setCustomValidity('');
-  }
-});
-*/
-
-// Работает корректно только если последним меняется кол-во комнат
-/*
-roomNumber.addEventListener('change', function (evt) {
-  var target = evt.target;
-  if (+target.value === 1 && +target.value !== +capacityPeople.value) {
-    target.setCustomValidity('Допустимо 1 комната — «для 1 гостя»');
-  } else if (+target.value === 2 && (+target.value < +capacityPeople.value || +capacityPeople.value === 0)) {
-    target.setCustomValidity('Допустимо 2 комнаты — «для 2 гостей» или «для 1 гостя»');
-  } else if (+target.value === 3 && (+target.value < +capacityPeople.value || +capacityPeople.value === 0)) {
-    target.setCustomValidity('Допустимо 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
-  } else if (+target.value === 100 && +capacityPeople.value !== 0) {
-    target.setCustomValidity('Допустимо 100 комнат — «не для гостей»');
-  } else {
-    target.setCustomValidity('');
-  }
-});
-*/
-
-form.addEventListener('submit', function () {
+form.addEventListener('change', function (evt) {
+  evt.preventDefault();
   if (+roomNumber.value === 1 && +roomNumber.value !== +capacityPeople.value) {
     roomNumber.setCustomValidity('Допустимо 1 комната — «для 1 гостя»');
   } else if (+roomNumber.value === 2 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === 0)) {
@@ -300,7 +270,4 @@ form.addEventListener('submit', function () {
   } else {
     roomNumber.setCustomValidity('');
   }
-  // console.log(roomNumber.value, typeof (roomNumber.value), typeof (+roomNumber.value));
-  // console.log(capacityPeople.value, typeof (capacityPeople.value));
 });
-
