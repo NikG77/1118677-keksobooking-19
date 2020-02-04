@@ -167,9 +167,9 @@ var renderCards = function () {
 };
 
 var addressData = createAddressData(NUMBER_DATA);
-renderPins();
+// renderPins();
 // метод отрисовки карточки можно закомментировать до тех пор, пока вы не доберётесь до 2-й части задания, чтобы eslint не ругался.
-renderCards();
+// renderCards();
 
 // Задание 4.2
 
@@ -235,8 +235,7 @@ var showAddress = function () {
 
 disableInputForm();
 showAddress();
-// временно для удобства
-openMapPin();
+
 
 // Активирует метку при нажатие основной кнопки мыши
 buttonMap.addEventListener('mousedown', function (evt) {
