@@ -253,10 +253,6 @@ buttonMap.addEventListener('keydown', function (evt) {
   }
 });
 
-// временные данные для тестового ввода
-form.querySelector('#title').value = 'Важно!!! Милая, уютная квартирка в центре Токио';
-form.querySelector('#price').value = 6000;
-
 form.addEventListener('change', function (evt) {
   evt.preventDefault();
   if (+roomNumber.value === 1 && +roomNumber.value !== +capacityPeople.value) {
