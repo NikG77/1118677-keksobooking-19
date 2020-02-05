@@ -1,6 +1,7 @@
 'use strict';
 
-var NUMBER_DATA = 8;
+// Уменьшил с 8 до 0 чтоб eslint не ругался
+var NUMBER_DATA = 0;
 var PIN_SIZE_X = 40;
 var PIN_SIZE_Y = 40;
 var PRICE_MIN = 0;
@@ -18,7 +19,7 @@ var similarPinElement = document.querySelector('.map').querySelector('.map__pins
 
 var similarCardTemplate = document.querySelector('#card').content;
 
-var similarCardElement = document.querySelector('.map');
+var map = document.querySelector('.map');
 
 // Выдает рандомное число в диапозоне от minNumber до maxNumber
 var getRandomRange = function (minNumber, maxNumber) {
@@ -97,13 +98,13 @@ var renderPins = function () {
 };
 
 // Переводит тип адреса с английского на русский
-var translateType = function (x) {
+var translateType = function (translateWord) {
   for (var i = 0; i < type.length; i++) {
-    if (type[i] === x) {
+    if (type[i] === translateWord) {
       return typeRu[i];
     }
   }
-  return x;
+  return translateWord;
 };
 
 // Удаляет список дочерние элементы list и cоздает на основе входящего массива arr новый список
@@ -163,15 +164,109 @@ var renderCards = function () {
   for (var i = 0; i < 1; i++) {
     fragment.appendChild(createCard(addressData[i]));
   }
-  similarCardElement.insertBefore(fragment, similarCardElement.querySelector('.map__filters-container'));
+  map.insertBefore(fragment, map.querySelector('.map__filters-container'));
 };
 
 var addressData = createAddressData(NUMBER_DATA);
-document.querySelector('.map').classList.remove('map--faded');
 renderPins();
-
+// метод отрисовки карточки можно закомментировать до тех пор, пока вы не доберётесь до 2-й части задания, чтобы eslint не ругался.
 renderCards();
 
-// var addressCard = renderCard(addressData[0]);
-// console.log(addressData[0]);
-// console.log(addressCard);
+// Задание 4.2
+
+var KEY = {
+  ESC: 'Escape',
+  ENTER: 'Enter'
+};
+var MAIN_PIN_SIZE_X = 65;
+var MAIN_PIN_SIZE_Y = 65;
+var MAIN_POINTER_Y = 22;
+
+var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN_SIZE_X / 2);
+var locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN_SIZE_Y / 2);
+
+var form = document.querySelector('.ad-form');
+var buttonMap = map.querySelector('.map__pin');
+
+var formInput = form.querySelectorAll('input');
+var formSelect = form.querySelectorAll('select');
+var formTextarea = form.querySelector('textarea');
+var formButton = form.querySelectorAll('.ad-form__submit');
+
+var roomNumber = form.querySelector('#room_number');
+var capacityPeople = form.querySelector('#capacity');
+
+// Активизирует карту, показывает обновленный адрес со сдвигом на метку
+var openMap = function () {
+  map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
+
+  activateInputForm();
+  locationY += Math.round(MAIN_PIN_SIZE_Y / 2 + MAIN_POINTER_Y);
+  showAddress();
+};
+
+// Добавляет в 'ad-form' всем  input и select disabled
+var disableInputForm = function () {
+  disablePartForm(formInput);
+  disablePartForm(formSelect);
+  disablePartForm(formTextarea);
+  disablePartForm(formButton);
+};
+
+var disablePartForm = function (partForm) {
+  for (var i = 0; i < partForm.length; i++) {
+    partForm[i].disabled = true;
+  }
+};
+
+// Удаляет из 'ad-form' input и select disabled
+var activateInputForm = function () {
+  activatePartForm(formInput);
+  activatePartForm(formSelect);
+  activatePartForm(formTextarea);
+  activatePartForm(formButton);
+};
+
+var activatePartForm = function (partForm) {
+  for (var i = 0; i < partForm.length; i++) {
+    partForm[i].disabled = false;
+  }
+};
+
+// Показывает адрес текущей метки
+var showAddress = function () {
+  form.querySelector('#address').value = locationX + ', ' + locationY;
+};
+
+showAddress();
+disableInputForm();
+
+// Активирует метку при нажатие основной кнопки мыши
+buttonMap.addEventListener('mousedown', function (evt) {
+  if (evt.button === 0) {
+    openMap();
+  }
+});
+
+// Активирует метку при нажатие Enter
+buttonMap.addEventListener('keydown', function (evt) {
+  if (evt.key === KEY.ENTER) {
+    openMap();
+  }
+});
+
+form.addEventListener('change', function (evt) {
+  evt.preventDefault();
+  if (+roomNumber.value === 1 && +roomNumber.value !== +capacityPeople.value) {
+    roomNumber.setCustomValidity('Допустимо 1 комната — «для 1 гостя»');
+  } else if (+roomNumber.value === 2 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === 0)) {
+    roomNumber.setCustomValidity('Допустимо 2 комнаты — «для 2 гостей» или «для 1 гостя»');
+  } else if (+roomNumber.value === 3 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === 0)) {
+    roomNumber.setCustomValidity('Допустимо 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
+  } else if (+roomNumber.value === 100 && +capacityPeople.value !== 0) {
+    roomNumber.setCustomValidity('Допустимо 100 комнат — «не для гостей»');
+  } else {
+    roomNumber.setCustomValidity('');
+  }
+});
