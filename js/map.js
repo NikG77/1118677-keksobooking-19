@@ -1,6 +1,9 @@
 'use strict';
 
 var NUMBER_DATA = 8;
+var MAIN_PIN_SIZE_X = 65;
+var MAIN_PIN_SIZE_Y = 65;
+var MAIN_POINTER_Y = 22;
 
 var map = document.querySelector('.map');
 
@@ -20,20 +23,16 @@ var renderCards = function () {
 };
 */
 
+
 // Создает NUMBER_DATA рандомных объявлений
-var addressData = window.data(NUMBER_DATA);
+var addressData = window.data.createAddressData(NUMBER_DATA);
 
 // Выводит рандомные pin на экран
-window.pin.renderPins(addressData);
+// window.pin.renderPins(addressData);
 
 // renderCards();
 
 // Задание 4.2
-
-var MAIN_PIN_SIZE_X = 65;
-var MAIN_PIN_SIZE_Y = 65;
-var MAIN_POINTER_Y = 22;
-
 var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN_SIZE_X / 2);
 var locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN_SIZE_Y / 2);
 

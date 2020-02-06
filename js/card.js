@@ -1,23 +1,7 @@
 'use strict';
 
 (function () {
-  var type = ['palace', 'flat', 'house', 'bungalo'];
-  var typeRu = ['Дворец', 'Квартира', 'Дом', 'Бунгало'];
-
-
   var similarCardTemplate = document.querySelector('#card').content;
-
-  // var map = document.querySelector('.map');
-
-  // Переводит тип адреса с английского на русский
-  var translateType = function (translateWord) {
-    for (var i = 0; i < type.length; i++) {
-      if (type[i] === translateWord) {
-        return typeRu[i];
-      }
-    }
-    return translateWord;
-  };
 
   // Удаляет список дочерних элементы list и cоздает на основе входящего массива arr новый список
   var createFeature = function (arr, list) {
@@ -50,7 +34,7 @@
       addressElement.querySelector('.popup__title').textContent = addressObject.offer.title;
       addressElement.querySelector('.popup__text--address').textContent = addressObject.offer.address;
       addressElement.querySelector('.popup__text--price').textContent = addressObject.offer.price + '₽/ночь';
-      addressElement.querySelector('.popup__type').textContent = translateType(addressObject.offer.type);
+      addressElement.querySelector('.popup__type').textContent = window.data.typeHouse[addressObject.offer.type];
       addressElement.querySelector('.popup__text--capacity').textContent = addressObject.offer.rooms + ' комнаты для ' + addressObject.offer.guests + ' гостей';
       addressElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + addressObject.offer.checkin + ', выезд до ' + addressObject.offer.checkout;
       addressElement.querySelector('.popup__description').textContent = addressObject.offer.description;
