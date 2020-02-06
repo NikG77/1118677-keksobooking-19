@@ -1,23 +1,6 @@
 'use strict';
 
-// Уменьшил с 8 до 0 чтоб eslint не ругался
-var NUMBER_DATA = 0;
-var PIN_SIZE_X = 40;
-var PIN_SIZE_Y = 40;
-var PRICE_MIN = 0;
-var PRICE_MAX = 1000;
-
-var type = ['palace', 'flat', 'house', 'bungalo'];
-var typeRu = ['Дворец', 'Квартира', 'Дом', 'Бунгало'];
-var checkin = ['12:00', '13:00', '14:00'];
-var checkout = ['12:00', '13:00', '14:00'];
-var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
-var similarPinTemplate = document.querySelector('#pin').content;
-var similarPinElement = document.querySelector('.map').querySelector('.map__pins');
-
-var similarCardTemplate = document.querySelector('#card').content;
+var NUMBER_DATA = 8;
 
 var map = document.querySelector('.map');
 
@@ -26,158 +9,26 @@ var getRandomRange = function (minNumber, maxNumber) {
   return Math.round(Math.random() * (maxNumber - minNumber) + minNumber);
 };
 
-// Выдает на основе входящего массива один рандомный элемент массива
-var getRandomElement = function (arr) {
-  var numberRandom = getRandomRange(0, arr.length - 1);
-  return arr[numberRandom];
-};
-
-// Выдает на основе входящего массива массив с рандомным кол-вом элементов
-var getRandomArray = function (arr) {
-  var numberRandom = getRandomRange(0, arr.length);
-  var arrClon = arr.slice();
-  var arrNew = [];
-  var numberArrRandom;
-
-  for (var j = 0; j < numberRandom; j++) {
-    numberArrRandom = getRandomRange(0, arrClon.length - 1);
-    arrNew[j] = arrClon[numberArrRandom];
-    arrClon.splice(numberArrRandom, 1);
-  }
-  return arrNew;
-};
-
-// Создает массив с рандомными объектами адрессов по входящему кол-ву массива
-var createAddressData = function (number) {
-  var anyAddressData = [];
-  for (var i = 0; i < number; i++) {
-    anyAddressData[i] = {
-      author: {
-        avatar: 'img/avatars/user0' + (i + 1) + '.png'
-      },
-      offer: {
-        title: 'Заголовок предложения',
-        address: '600, 350',
-        price: getRandomRange(PRICE_MIN, PRICE_MAX),
-        type: getRandomElement(type),
-        rooms: getRandomRange(0, 10),
-        guests: getRandomRange(0, 10),
-        checkin: getRandomElement(checkin),
-        checkout: getRandomElement(checkout),
-        features: getRandomArray(features),
-        description: 'строка с описанием',
-        photos: getRandomArray(photos)
-      },
-      location: {
-        x: getRandomRange(0, 1200),
-        y: getRandomRange(130, 650)
-      }
-    };
-  }
-  return anyAddressData;
-};
-
-// Создает метку на основе шаблона #pin по полученному объекту
-var createPin = function (address) {
-  var addressElement = similarPinTemplate.cloneNode(true);
-  var locationUnion = 'left: ' + (address.location.x - PIN_SIZE_X / 2) + 'px; ' + 'top: ' + (address.location.y - PIN_SIZE_Y) + 'px; ';
-
-  addressElement.querySelector('.map__pin').style = locationUnion;
-  addressElement.querySelector('img').src = address.author.avatar;
-  addressElement.querySelector('img').alt = address.offer.title;
-  return addressElement;
-};
-
-// Выводит в разметку созданные метки
-var renderPins = function () {
-  var fragment = document.createDocumentFragment();
-  for (var i = 0; i < addressData.length; i++) {
-    fragment.appendChild(createPin(addressData[i]));
-  }
-  similarPinElement.appendChild(fragment);
-};
-
-// Переводит тип адреса с английского на русский
-var translateType = function (translateWord) {
-  for (var i = 0; i < type.length; i++) {
-    if (type[i] === translateWord) {
-      return typeRu[i];
-    }
-  }
-  return translateWord;
-};
-
-// Удаляет список дочерние элементы list и cоздает на основе входящего массива arr новый список
-var createFeature = function (arr, list) {
-  list.innerHTML = '';
-  for (var i = 0; i < arr.length; i++) {
-    var newElementLi = document.createElement('li');
-    newElementLi.classList.add('popup__feature');
-    newElementLi.classList.add('popup__feature--' + arr[i]);
-    list.appendChild(newElementLi);
-  }
-};
-
-// Создает список фотографий из полученного массива
-var createPhotos = function (arr, photosTemplate) {
-  photosTemplate.querySelector('img').src = arr[0];
-  for (var i = 1; i < arr.length; i++) {
-    var newElementImg = photosTemplate.querySelector('img').cloneNode(true);
-    newElementImg.src = arr[i];
-    photosTemplate.appendChild(newElementImg);
-  }
-};
-
-// Создает карточку адреса по шаблону #card по полученному объекту
-var createCard = function (addressObject) {
-  var addressElement = similarCardTemplate.cloneNode(true);
-  var list = addressElement.querySelector('.popup__features');
-  var photosTemplate = addressElement.querySelector('.popup__photos');
-
-  addressElement.querySelector('.popup__title').textContent = addressObject.offer.title;
-  addressElement.querySelector('.popup__text--address').textContent = addressObject.offer.address;
-  addressElement.querySelector('.popup__text--price').textContent = addressObject.offer.price + '₽/ночь';
-  addressElement.querySelector('.popup__type').textContent = translateType(addressObject.offer.type);
-  addressElement.querySelector('.popup__text--capacity').textContent = addressObject.offer.rooms + ' комнаты для ' + addressObject.offer.guests + ' гостей';
-  addressElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + addressObject.offer.checkin + ', выезд до ' + addressObject.offer.checkout;
-  addressElement.querySelector('.popup__description').textContent = addressObject.offer.description;
-  addressElement.querySelector('.popup__avatar').src = addressObject.author.avatar;
-
-  if (addressObject.offer.features[0]) {
-    createFeature(addressObject.offer.features, list);
-  } else {
-    addressElement.querySelector('.popup__features').remove();
-  }
-
-  if (addressObject.offer.photos[0]) {
-    createPhotos(addressObject.offer.photos, photosTemplate);
-  } else {
-    addressElement.querySelector('.popup__photos').remove();
-  }
-
-  return addressElement;
-};
-
-// Выводит в разметку созданные карточки
+// Добавляет в DOM созданные карточки до i элемента
 var renderCards = function () {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < 1; i++) {
-    fragment.appendChild(createCard(addressData[i]));
+    fragment.appendChild(window.card.createCard(addressData[i]));
   }
   map.insertBefore(fragment, map.querySelector('.map__filters-container'));
 };
 
-var addressData = createAddressData(NUMBER_DATA);
-renderPins();
-// метод отрисовки карточки можно закомментировать до тех пор, пока вы не доберётесь до 2-й части задания, чтобы eslint не ругался.
-renderCards();
+// Создает NUMBER_DATA рандомных объявлений
+var addressData = window.data(NUMBER_DATA);
+
+// Выводит рандомные pin на экран
+// window.pin.renderPins(addressData);
+
+//
+// renderCards();
 
 // Задание 4.2
 
-var KEY = {
-  ESC: 'Escape',
-  ENTER: 'Enter'
-};
 var MAIN_PIN_SIZE_X = 65;
 var MAIN_PIN_SIZE_Y = 65;
 var MAIN_POINTER_Y = 22;
@@ -193,8 +44,8 @@ var formSelect = form.querySelectorAll('select');
 var formTextarea = form.querySelector('textarea');
 var formButton = form.querySelectorAll('.ad-form__submit');
 
-var roomNumber = form.querySelector('#room_number');
-var capacityPeople = form.querySelector('#capacity');
+// var roomNumber = form.querySelector('#room_number');
+// var capacityPeople = form.querySelector('#capacity');
 
 // Активизирует карту, показывает обновленный адрес со сдвигом на метку
 var openMap = function () {
@@ -244,29 +95,10 @@ disableInputForm();
 
 // Активирует метку при нажатие основной кнопки мыши
 buttonMap.addEventListener('mousedown', function (evt) {
-  if (evt.button === 0) {
-    openMap();
-  }
+  window.keyCheck.isMouseMainClickEvent(evt, openMap);
 });
 
 // Активирует метку при нажатие Enter
 buttonMap.addEventListener('keydown', function (evt) {
-  if (evt.key === KEY.ENTER) {
-    openMap();
-  }
-});
-
-form.addEventListener('change', function (evt) {
-  evt.preventDefault();
-  if (+roomNumber.value === 1 && +roomNumber.value !== +capacityPeople.value) {
-    roomNumber.setCustomValidity('Допустимо 1 комната — «для 1 гостя»');
-  } else if (+roomNumber.value === 2 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === 0)) {
-    roomNumber.setCustomValidity('Допустимо 2 комнаты — «для 2 гостей» или «для 1 гостя»');
-  } else if (+roomNumber.value === 3 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === 0)) {
-    roomNumber.setCustomValidity('Допустимо 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
-  } else if (+roomNumber.value === 100 && +capacityPeople.value !== 0) {
-    roomNumber.setCustomValidity('Допустимо 100 комнат — «не для гостей»');
-  } else {
-    roomNumber.setCustomValidity('');
-  }
+  window.keyCheck.isEnterEvent(evt, openMap);
 });
