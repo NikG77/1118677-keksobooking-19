@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var NUMBER_DATA = 8;
+  // var NUMBER_DATA = 8;
   var MAIN_PIN_SIZE_X = 65;
   var MAIN_PIN_SIZE_Y = 65;
   var MAIN_POINTER_Y = 22;
@@ -26,26 +26,26 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  var onLoad = function (onloadData) {
-    var addressData = onloadData;
-
-    renderCards(addressData);
-
-    window.pin.renderPins(addressData);
-  };
-
   // метод отрисовки карточки можно закомментировать до тех пор, пока вы не доберётесь до 2-й части задания, чтобы eslint не ругался.
   // Добавляет в DOM все полученные карточки
   var renderCards = function (addressData) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < addressData.length; i++) {
+    for (var i = 0; i < 1; i++) {
       fragment.appendChild(window.card.createCard(addressData[i]));
     }
     map.insertBefore(fragment, map.querySelector('.map__filters-container'));
   };
 
+  var onLoad = function (onloadData) {
+    var addressData = onloadData;
+    renderCards(addressData);
+
+    window.pin.renderPins(addressData);
+  };
+
   // Получает данные с сервера
   window.backend.load(onLoad, onError);
+
 
   // Задание 4.2
   var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN_SIZE_X / 2);
