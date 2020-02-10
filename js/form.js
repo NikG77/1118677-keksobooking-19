@@ -5,6 +5,7 @@
   var roomNumber = form.querySelector('#room_number');
   var capacityPeople = form.querySelector('#capacity');
 
+  // Проверка кастомной валидации на imput
   form.addEventListener('change', function (evt) {
     evt.preventDefault();
     if (+roomNumber.value === 1 && +roomNumber.value !== +capacityPeople.value) {
