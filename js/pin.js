@@ -7,6 +7,7 @@
   var similarPinTemplate = document.querySelector('#pin').content;
   var similarPinElement = document.querySelector('.map').querySelector('.map__pins');
 
+  // Создает pin с адресом, аватором на img и alt для img
   var createPin = function (address) {
     var addressElement = similarPinTemplate.cloneNode(true);
     var locationUnion = 'left: ' + (address.location.x - PIN_SIZE_X / 2) + 'px; ' + 'top: ' + (address.location.y - PIN_SIZE_Y) + 'px; ';
