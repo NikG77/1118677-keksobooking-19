@@ -2,9 +2,12 @@
 
 (function () {
   // var NUMBER_DATA = 8;
-  var MAIN_PIN_SIZE_X = 65;
-  var MAIN_PIN_SIZE_Y = 65;
-  var MAIN_POINTER_Y = 22;
+  var URL = 'https://js.dump.academy/keksobooking/data';
+  var MAIN_PIN = {
+    WIDTH: 65,
+    HEIGHT: 65,
+    POINTER_Y: 22
+  };
 
   var map = document.querySelector('.map');
 
@@ -44,12 +47,12 @@
   };
 
   // Получает данные с сервера
-  window.backend.load(onLoad, onError);
+  window.backend.load(URL, onLoad, onError);
 
 
   // Задание 4.2
-  var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN_SIZE_X / 2);
-  var locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN_SIZE_Y / 2);
+  var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN.WIDTH / 2);
+  var locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN.HEIGHT / 2);
 
   var form = document.querySelector('.ad-form');
   var buttonMap = map.querySelector('.map__pin');
@@ -65,7 +68,7 @@
     form.classList.remove('ad-form--disabled');
 
     activateInputForm();
-    locationY += Math.round(MAIN_PIN_SIZE_Y / 2 + MAIN_POINTER_Y);
+    locationY += Math.round(MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y);
     showAddress();
   };
 
