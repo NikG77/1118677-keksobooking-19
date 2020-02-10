@@ -13,7 +13,6 @@
     return Math.round(Math.random() * (maxNumber - minNumber) + minNumber);
   };
 
-  var addressData;
   // Выводит в созданный div информацию об ошибке
   var onError = function (errorMessage) {
     var node = document.createElement('div');
@@ -27,32 +26,26 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  var addressData;
   var onLoad = function (onloadData) {
-    addressData = onloadData;
+    var addressData = onloadData;
+
+    renderCards(addressData);
+
+    window.pin.renderPins(addressData);
   };
 
   // метод отрисовки карточки можно закомментировать до тех пор, пока вы не доберётесь до 2-й части задания, чтобы eslint не ругался.
-  // Добавляет в DOM созданные карточки до NUMBER_DATA элемента
-  var renderCards = function () {
+  // Добавляет в DOM все полученные карточки
+  var renderCards = function (addressData) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < NUMBER_DATA; i++) {
+    for (var i = 0; i < addressData.length; i++) {
       fragment.appendChild(window.card.createCard(addressData[i]));
     }
     map.insertBefore(fragment, map.querySelector('.map__filters-container'));
   };
 
-  // Создает NUMBER_DATA рандомных объявлений
-  // addressData = window.data.createAddressData(NUMBER_DATA);
-
   // Получает данные с сервера
   window.backend.load(onLoad, onError);
-
-  // Выводит pin на экран
-  window.pin.renderPins(addressData);
-
-  // Выводит объявление в разметку
-  renderCards();
 
   // Задание 4.2
   var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN_SIZE_X / 2);
