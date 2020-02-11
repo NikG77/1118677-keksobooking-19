@@ -29,37 +29,40 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
+  var renderCards = function () {
+    console.log('Клик');
+    /*
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(window.card.createCard(addressData[i]));
+    map.insertBefore(fragment, map.querySelector('.map__filters-container'));
+    */
+  };
+
   var onLoad = function (onloadData) {
     var addressData = onloadData;
 
-    var renderCards = function () {
-      console.log('Клик');
-
-      var fragment = document.createDocumentFragment();
-      fragment.appendChild(window.card.createCard(addressData[i]));
-      map.insertBefore(fragment, map.querySelector('.map__filters-container'));
-    };
-
     window.pin.renderPins(addressData);
-    var buttonPin = map.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-    for (var i = 0; i < buttonPin.length; i++) {
-      buttonPin[i].addEventListener('mousedown', function (evt) {
-        window.keyCheck.isMouseMainClickEvent(evt, renderCards);
-      });
-    }
   };
 
   // Получает данные с сервера
   window.backend.load(URL, onLoad, onError);
 
 
+  var buttonPins = map.querySelector('.map__pins');
+  buttonPins.addEventListener('mousedown', function (evt) {
+    var dataIndex = evt.target.closest('button').dataset.index;
+    console.log(dataIndex);
+    renderCards();
+
+    // window.keyCheck.isMouseMainClickEvent(evt, renderCards;
+  });
+
   // Задание 4.2
   var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN.WIDTH / 2);
   var locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN.HEIGHT / 2);
 
   var form = document.querySelector('.ad-form');
-  var buttonMap = map.querySelector('.map__pin');
+  var buttonPin = map.querySelector('.map__pin');
 
   var formInput = form.querySelectorAll('input');
   var formSelect = form.querySelectorAll('select');
@@ -113,12 +116,12 @@
   disableInputForm();
 
   // Активирует метку при нажатие основной кнопки мыши
-  buttonMap.addEventListener('mousedown', function (evt) {
+  buttonPin.addEventListener('mousedown', function (evt) {
     window.keyCheck.isMouseMainClickEvent(evt, openMap);
   });
 
   // Активирует метку при нажатие Enter
-  buttonMap.addEventListener('keydown', function (evt) {
+  buttonPin.addEventListener('keydown', function (evt) {
     window.keyCheck.isEnterEvent(evt, openMap);
   });
 
