@@ -29,21 +29,25 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  // метод отрисовки карточки можно закомментировать до тех пор, пока вы не доберётесь до 2-й части задания, чтобы eslint не ругался.
-  // Добавляет в DOM все полученные карточки
-  var renderCards = function (addressData) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < 1; i++) {
-      fragment.appendChild(window.card.createCard(addressData[i]));
-    }
-    map.insertBefore(fragment, map.querySelector('.map__filters-container'));
-  };
-
   var onLoad = function (onloadData) {
     var addressData = onloadData;
-    renderCards(addressData);
+
+    var renderCards = function () {
+      console.log('Клик');
+
+      var fragment = document.createDocumentFragment();
+      fragment.appendChild(window.card.createCard(addressData[i]));
+      map.insertBefore(fragment, map.querySelector('.map__filters-container'));
+    };
 
     window.pin.renderPins(addressData);
+    var buttonPin = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    for (var i = 0; i < buttonPin.length; i++) {
+      buttonPin[i].addEventListener('mousedown', function (evt) {
+        window.keyCheck.isMouseMainClickEvent(evt, renderCards);
+      });
+    }
   };
 
   // Получает данные с сервера

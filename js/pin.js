@@ -17,6 +17,8 @@
     addressElement.querySelector('.map__pin').style = locationUnion;
     addressElement.querySelector('img').src = address.author.avatar;
     addressElement.querySelector('img').alt = address.offer.title;
+    // добавляет класс hiden меткам
+    // addressElement.classList.add('hiden');
     return addressElement;
   };
 
@@ -24,8 +26,10 @@
   window.pin = {
     renderPins: function (addressData) {
       var fragment = document.createDocumentFragment();
+      var newPin;
       for (var i = 0; i < addressData.length; i++) {
-        fragment.appendChild(createPin(addressData[i]));
+        newPin = createPin(addressData[i]);
+        fragment.appendChild(newPin);
       }
       similarPinElement.appendChild(fragment);
     }
