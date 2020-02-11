@@ -1,15 +1,18 @@
 'use strict';
 // Создает метку на основе шаблона #pin по полученному объекту
 (function () {
-  var PIN_SIZE_X = 40;
-  var PIN_SIZE_Y = 40;
+  var PIN = {
+    WIDTH: 40,
+    HEIGHT: 40
+  };
 
   var similarPinTemplate = document.querySelector('#pin').content;
   var similarPinElement = document.querySelector('.map').querySelector('.map__pins');
 
+  // Создает pin с адресом, аватором на img и alt для img
   var createPin = function (address) {
     var addressElement = similarPinTemplate.cloneNode(true);
-    var locationUnion = 'left: ' + (address.location.x - PIN_SIZE_X / 2) + 'px; ' + 'top: ' + (address.location.y - PIN_SIZE_Y) + 'px; ';
+    var locationUnion = 'left: ' + (address.location.x - PIN.WIDTH / 2) + 'px; ' + 'top: ' + (address.location.y - PIN.HEIGHT) + 'px; ';
 
     addressElement.querySelector('.map__pin').style = locationUnion;
     addressElement.querySelector('img').src = address.author.avatar;
