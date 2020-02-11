@@ -20,4 +20,19 @@
       roomNumber.setCustomValidity('');
     }
   });
+
+  var inputTitle = form.querySelector('#title');
+  inputTitle.addEventListener('input', function (evt) {
+    evt.preventDefault();
+    if (inputTitle.validity.tooShort) {
+      inputTitle.setCustomValidity('Имя должно состоять минимум из 30-х символов, но не более 100-ти символов ');
+    } else if (inputTitle.validity.tooLong) {
+      inputTitle.setCustomValidity('Имя не должно превышать 100-ти символов');
+    } else if (inputTitle.validity.valueMissing) {
+      inputTitle.setCustomValidity('Обязательное поле для заполнения');
+    } else {
+      inputTitle.setCustomValidity('');
+    }
+  });
+
 })();
