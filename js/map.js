@@ -29,32 +29,56 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  var renderCards = function () {
-    console.log('Клик');
-    /*
+  var renderCards = function (i) {
     var fragment = document.createDocumentFragment();
     fragment.appendChild(window.card.createCard(addressData[i]));
     map.insertBefore(fragment, map.querySelector('.map__filters-container'));
-    */
   };
 
-  var onLoad = function (onloadData) {
-    var addressData = onloadData;
+  var addressData;
 
+  // Отрисовывает pin из базы даннных после успешного получения с сервера
+  var onLoad = function (onloadData) {
+    addressData = onloadData;
     window.pin.renderPins(addressData);
   };
 
   // Получает данные с сервера
   window.backend.load(URL, onLoad, onError);
 
+  // Обработчик закрытия окна карточки
+  var onPopupEscPress = function (evt) {
+    window.keyCheck.isEscEvent(evt, closePopup);
+  };
 
-  var buttonPins = map.querySelector('.map__pins');
-  buttonPins.addEventListener('mousedown', function (evt) {
+  // Выводит карточку на экран
+  var showCard = function (evt) {
     var dataIndex = evt.target.closest('button').dataset.index;
-    console.log(dataIndex);
-    renderCards();
+    if (dataIndex) {
+      renderCards(dataIndex);
+      document.addEventListener('keydown', onPopupEscPress);
+    }
+  };
 
-    // window.keyCheck.isMouseMainClickEvent(evt, renderCards;
+  // Закрывает popup по клавише ESC
+  var closePopup = function () {
+    document.querySelector('.popup').remove();
+    document.removeEventListener('keydown', onPopupEscPress);
+  };
+
+  // Активирует карточку объявления при клике на метку
+  var setupOpenCard = map.querySelector('.map__pins');
+  setupOpenCard.addEventListener('click', showCard);
+
+  // Активирует карточку объявления пo tab
+  setupOpenCard.addEventListener('keydown', function (evt) {
+    window.keyCheck.isEnterEvent(evt, showCard);
+  });
+
+  var setupCloseCard = document.querySelector('.popup__close');
+  // Закрывает карточку объявления по клику
+  setupCloseCard.addEventListener('click', function () {
+    closePopup();
   });
 
   // Задание 4.2

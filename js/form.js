@@ -21,6 +21,8 @@
     }
   });
 
+
+  // Валидация Заголовка объявления
   var inputTitle = form.querySelector('#title');
   inputTitle.addEventListener('input', function (evt) {
     evt.preventDefault();
@@ -34,5 +36,23 @@
       inputTitle.setCustomValidity('');
     }
   });
+
+  // Валидация поля Цены за ночь
+  var inputPrice = form.querySelector('#price');
+  inputPrice.addEventListener('input', function (evt) {
+    evt.preventDefault();
+    if (inputPrice.validity.tooShort) {
+      inputPrice.setCustomValidity('Имя должно состоять минимум из 30-х символов, но не более 100-ти символов ');
+    } else if (inputPrice.validity.tooLong) {
+      inputPrice.setCustomValidity('Имя не должно превышать 100-ти символов');
+    } else if (inputPrice.validity.valueMissing) {
+      inputPrice.setCustomValidity('Обязательное поле для заполнения');
+    } else {
+      inputPrice.setCustomValidity('');
+    }
+  });
+
+
+  inputTitle.value = 'Временно чтоб постоянно не забивать данные при проверки валидации';
 
 })();

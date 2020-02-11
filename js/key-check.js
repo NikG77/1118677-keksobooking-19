@@ -21,6 +21,14 @@
       if (evt.button === MOUSE_MAIN_CLICK) {
         action();
       }
+    },
+    // Спрятать элемент, добавив класс  'hidden'
+    hideElement: function (hideClass) {
+      document.querySelector(hideClass).classList.add('hidden');
+    },
+    // Показать элемент, убрав класс  'hidden'
+    showElement: function (showClass) {
+      document.querySelector(showClass).classList.remove('hidden');
     }
   };
 })();
