@@ -9,7 +9,21 @@
     POINTER_Y: 22
   };
 
+  var openCardStatus = true;
+  var addressData;
+
+  var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN.WIDTH / 2);
+  var locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN.HEIGHT / 2);
+
   var map = document.querySelector('.map');
+  var buttonPin = map.querySelector('.map__pin');
+
+  var form = document.querySelector('.ad-form');
+  var formInput = form.querySelectorAll('input');
+  var formSelect = form.querySelectorAll('select');
+  var formTextarea = form.querySelector('textarea');
+  var formButton = form.querySelectorAll('.ad-form__submit');
+
 
   // Выдает рандомное число в диапозоне от minNumber до maxNumber
   var getRandomRange = function (minNumber, maxNumber) {
@@ -35,53 +49,46 @@
     map.insertBefore(fragment, map.querySelector('.map__filters-container'));
   };
 
-  var addressData;
-
-  // Отрисовывает pin из базы даннных после успешного получения с сервера
+  // Сохраняет базу данных адресов из базы даннных после успешного получения с сервера
   var onLoad = function (onloadData) {
     addressData = onloadData;
-    window.pin.renderPins(addressData);
   };
 
   // Получает данные с сервера
   window.backend.load(URL, onLoad, onError);
 
-  // Обработчик закрытия окна карточки
+  // Обработчик закрытия окна карточки ESC
   var onPopupEscPress = function (evt) {
-    window.keyCheck.isEscEvent(evt, closePopup);
+    window.utils.isEscEvent(evt, closePopup);
   };
 
-  // Закрывает popup по клавише ESC
+  // Закрывает popup: удаляет показанное объявление из разметки, удаляет обработчик ESC
   var closePopup = function () {
     document.querySelector('.popup').remove();
     document.removeEventListener('keydown', onPopupEscPress);
     openCardStatus = true;
   };
 
-  var openCardStatus = true;
   // Выводит карточку на экран
   var showCard = function (evt) {
-    // console.log(evt.target.closest('button').tagName.toLowerCase());
-    if (evt.target.closest('button').tagName.toLowerCase() !== 'button') {
-      return;
-    }
+    if (evt.target.closest('button') && evt.target.closest('button').tagName.toLowerCase() === 'button') {
+      var dataIndex = evt.target.closest('button').dataset.index;
+      if (openCardStatus && dataIndex) {
+        renderCards(dataIndex);
+        openCardStatus = false;
+        // Включаю слушатель на закрытие по ESC
+        document.addEventListener('keydown', onPopupEscPress);
 
-    var dataIndex = evt.target.closest('button').dataset.index;
-    if (openCardStatus && dataIndex) {
-      renderCards(dataIndex);
-      openCardStatus = false;
-      // Включаю слушатель на закрытие по ESC
-      document.addEventListener('keydown', onPopupEscPress);
-
-      var setupCloseCard = document.querySelector('.popup__close');
-      // включаю слушатель закрытия карточки объявления по клику
-      setupCloseCard.addEventListener('click', function () {
-        closePopup();
-      });
-      // Закрывает карточку объявления по табу
-      // setupCloseCard.addEventListener('keydown', function () {
-      //   window.keyCheck.isEnterEvent(evt, closePopup);
-      // });
+        var setupCloseCard = document.querySelector('.popup__close');
+        // включаю слушатель закрытия карточки объявления по клику
+        setupCloseCard.addEventListener('click', function () {
+          closePopup();
+        });
+        // Закрывает карточку объявления по табу
+        // setupCloseCard.addEventListener('keydown', function () {
+        //   window.utils.isEnterEvent(evt, closePopup);
+        // });
+      }
     }
   };
 
@@ -91,30 +98,22 @@
 
   // Активирует карточку объявления пo tab
   setupOpenCard.addEventListener('keydown', function (evt) {
-    window.keyCheck.isEnterEvent(evt, showCard);
+    window.utils.isEnterEvent(evt, showCard);
   });
-
-
-  // Задание 4.2
-  var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN.WIDTH / 2);
-  var locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN.HEIGHT / 2);
-
-  var form = document.querySelector('.ad-form');
-  var buttonPin = map.querySelector('.map__pin');
-
-  var formInput = form.querySelectorAll('input');
-  var formSelect = form.querySelectorAll('select');
-  var formTextarea = form.querySelector('textarea');
-  var formButton = form.querySelectorAll('.ad-form__submit');
 
   // Активизирует карту, показывает обновленный адрес со сдвигом на метку
   var openMap = function () {
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
 
+    // Отрисовывает метки из базы данных
+    window.pin.renderPins(addressData);
+
     activateInputForm();
     locationY += Math.round(MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y);
     showAddress();
+
+    buttonPin.removeEventListener('keydown', onOpenMapEnterPress);
   };
 
   // Добавляет в 'ad-form' всем  input и select disabled
@@ -153,14 +152,19 @@
   showAddress();
   disableInputForm();
 
+  // Обработчик открытия окна
+  var onOpenMapEnterPress = function (evt) {
+    window.utils.isEnterEvent(evt, openMap);
+
+  };
+
   // Активирует метку при нажатие основной кнопки мыши
   buttonPin.addEventListener('mousedown', function (evt) {
-    window.keyCheck.isMouseMainClickEvent(evt, openMap);
+    window.utils.isMouseMainClickEvent(evt, openMap);
   });
 
   // Активирует метку при нажатие Enter
-  buttonPin.addEventListener('keydown', function (evt) {
-    window.keyCheck.isEnterEvent(evt, openMap);
-  });
+  buttonPin.addEventListener('keydown', onOpenMapEnterPress);
+
 
 })();
