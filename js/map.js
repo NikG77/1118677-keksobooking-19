@@ -11,9 +11,8 @@
 
   var openCardStatus = true;
   var addressData;
-
-  var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN.WIDTH / 2);
-  var locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN.HEIGHT / 2);
+  var locationX;
+  var locationY;
 
   var map = document.querySelector('.map');
   var buttonPin = map.querySelector('.map__pin');
@@ -148,6 +147,9 @@
   var showAddress = function () {
     form.querySelector('#address').value = locationX + ', ' + locationY;
   };
+
+  locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN.WIDTH / 2);
+  locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN.HEIGHT / 2);
 
   showAddress();
   disableInputForm();
