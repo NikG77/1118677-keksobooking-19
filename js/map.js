@@ -51,22 +51,41 @@
     window.keyCheck.isEscEvent(evt, closePopup);
   };
 
-  // Выводит карточку на экран
-  var showCard = function (evt) {
-    var dataIndex = evt.target.closest('button').dataset.index;
-    if (dataIndex) {
-      renderCards(dataIndex);
-      document.addEventListener('keydown', onPopupEscPress);
-    }
-  };
-
   // Закрывает popup по клавише ESC
   var closePopup = function () {
     document.querySelector('.popup').remove();
     document.removeEventListener('keydown', onPopupEscPress);
+    openCardStatus = true;
   };
 
-  // Активирует карточку объявления при клике на метку
+  var openCardStatus = true;
+  // Выводит карточку на экран
+  var showCard = function (evt) {
+    // console.log(evt.target.closest('button').tagName.toLowerCase());
+    if (evt.target.closest('button').tagName.toLowerCase() !== 'button') {
+      return;
+    }
+
+    var dataIndex = evt.target.closest('button').dataset.index;
+    if (openCardStatus && dataIndex) {
+      renderCards(dataIndex);
+      openCardStatus = false;
+      // Включаю слушатель на закрытие по ESC
+      document.addEventListener('keydown', onPopupEscPress);
+
+      var setupCloseCard = document.querySelector('.popup__close');
+      // включаю слушатель закрытия карточки объявления по клику
+      setupCloseCard.addEventListener('click', function () {
+        closePopup();
+      });
+      // Закрывает карточку объявления по табу
+      // setupCloseCard.addEventListener('keydown', function () {
+      //   window.keyCheck.isEnterEvent(evt, closePopup);
+      // });
+    }
+  };
+
+  // Активирует карточку объявления при клике на метку на блок map__pins через делегирование
   var setupOpenCard = map.querySelector('.map__pins');
   setupOpenCard.addEventListener('click', showCard);
 
@@ -75,11 +94,6 @@
     window.keyCheck.isEnterEvent(evt, showCard);
   });
 
-  var setupCloseCard = document.querySelector('.popup__close');
-  // Закрывает карточку объявления по клику
-  setupCloseCard.addEventListener('click', function () {
-    closePopup();
-  });
 
   // Задание 4.2
   var locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN.WIDTH / 2);
