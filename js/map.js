@@ -10,7 +10,7 @@
   };
 
   var openCardStatus = true;
-  var addressData;
+  var addressData = [];
   var locationX;
   var locationY;
 
@@ -48,9 +48,16 @@
     map.insertBefore(fragment, map.querySelector('.map__filters-container'));
   };
 
-  // Сохраняет базу данных адресов из базы даннных после успешного получения с сервера
+  // Сохраняет базу данных адресов из базы даннных после успешного получения
+  // с сервера и проверки на наличия св-ва  offer
   var onLoad = function (onloadData) {
-    addressData = onloadData;
+    var j = 0;
+    for (var i = 0; i < onloadData.length; i++) {
+      if (onloadData[i]['offer']) {
+        addressData[j] = onloadData[i];
+        j++;
+      }
+    }
   };
 
   // Получает данные с сервера
