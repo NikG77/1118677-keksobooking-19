@@ -16,7 +16,7 @@
   var mapPinActive;
 
   var map = document.querySelector('.map');
-  var buttonPin = map.querySelector('.map__pin');
+  var buttonPinMain = map.querySelector('.map__pin--main');
 
   var form = document.querySelector('.ad-form');
   var formInput = form.querySelectorAll('input');
@@ -102,10 +102,6 @@
         setupCloseCard.addEventListener('click', function () {
           closePopup();
         });
-        // Закрывает карточку объявления по табу
-        // setupCloseCard.addEventListener('keydown', function () {
-        //   window.utils.isEnterEvent(evt, closePopup);
-        // });
       }
     }
   };
@@ -131,7 +127,7 @@
     locationY += Math.round(MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y);
     showAddress();
 
-    buttonPin.removeEventListener('keydown', onOpenMapEnterPress);
+    buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
   };
 
   // Добавляет в 'ad-form' всем  input и select disabled
@@ -180,12 +176,12 @@
   };
 
   // Активирует метку при нажатие основной кнопки мыши
-  buttonPin.addEventListener('mousedown', function (evt) {
+  buttonPinMain.addEventListener('mousedown', function (evt) {
     window.utils.isMouseMainClickEvent(evt, openMap);
   });
 
   // Активирует метку при нажатие Enter
-  buttonPin.addEventListener('keydown', onOpenMapEnterPress);
+  buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
 
 
 })();
