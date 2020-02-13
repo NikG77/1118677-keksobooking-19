@@ -6,7 +6,7 @@
   var ENTER_KEYCODE = 13;
   var MOUSE_MAIN_CLICK = 0;
 
-  window.keyCheck = {
+  window.utils = {
     isEscEvent: function (evt, action) {
       if (evt.keyCode === ESC_KEYCODE) {
         action();
@@ -21,6 +21,14 @@
       if (evt.button === MOUSE_MAIN_CLICK) {
         action();
       }
+    },
+    // Спрятать элемент, добавив класс  'hidden'
+    hideElement: function (hideClass) {
+      document.querySelector(hideClass).classList.add('hidden');
+    },
+    // Показать элемент, убрав класс  'hidden'
+    showElement: function (showClass) {
+      document.querySelector(showClass).classList.remove('hidden');
     }
   };
 })();
