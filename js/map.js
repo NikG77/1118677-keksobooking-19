@@ -122,8 +122,8 @@
     window.pin.renderPins(addressData);
 
     activateInputForm();
-    locationY += Math.round(MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y);
-    showAddress();
+    // locationY += Math.round(MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y);
+    window.utils.showAddress(locationX, locationY);
 
     buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
   };
@@ -156,15 +156,10 @@
     }
   };
 
-  // Показывает адрес текущей метки
-  var showAddress = function () {
-    form.querySelector('#address').value = locationX + ', ' + locationY;
-  };
-
   locationX = Math.round(LOCATION_START.X + MAIN_PIN.WIDTH / 2);
   locationY = Math.round(LOCATION_START.Y + MAIN_PIN.HEIGHT / 2);
 
-  showAddress();
+  window.utils.showAddress(locationX, locationY);
   disableInputForm();
 
   // Обработчик открытия окна

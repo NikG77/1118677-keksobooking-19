@@ -22,6 +22,10 @@
         action();
       }
     },
+    // Показывает адрес текущей метки
+    showAddress: function (X, Y) {
+      document.querySelector('#address').value = X + ', ' + Y;
+    },
     // Спрятать элемент, добавив класс  'hidden'
     hideElement: function (hideClass) {
       document.querySelector(hideClass).classList.add('hidden');
