@@ -85,7 +85,10 @@
   var showCard = function (evt) {
     if (evt.target.closest('button') && evt.target.closest('button').tagName.toLowerCase() === 'button') {
       var dataIndex = evt.target.closest('button').dataset.index;
-      if (openCardStatus && dataIndex) {
+      if (dataIndex) {
+        if (!openCardStatus) {
+          closePopup();
+        }
         renderCards(dataIndex);
         openCardStatus = false;
         mapPinActive = evt.target.closest('button');
