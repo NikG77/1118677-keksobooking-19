@@ -8,6 +8,10 @@
     HEIGHT: 65,
     POINTER_Y: 22
   };
+  var LOCATION_START = {
+    X: 570,
+    Y: 375,
+  };
 
   var openCardStatus = true;
   var addressData = [];
@@ -23,12 +27,6 @@
   var formSelect = form.querySelectorAll('select');
   var formTextarea = form.querySelector('textarea');
   var formButton = form.querySelectorAll('.ad-form__submit');
-
-
-  // Выдает рандомное число в диапозоне от minNumber до maxNumber
-  var getRandomRange = function (minNumber, maxNumber) {
-    return Math.round(Math.random() * (maxNumber - minNumber) + minNumber);
-  };
 
   // Выводит в созданный div информацию об ошибке
   var onError = function (errorMessage) {
@@ -163,8 +161,8 @@
     form.querySelector('#address').value = locationX + ', ' + locationY;
   };
 
-  locationX = Math.round(getRandomRange(0, 1200) + MAIN_PIN.WIDTH / 2);
-  locationY = Math.round(getRandomRange(130, 630) + MAIN_PIN.HEIGHT / 2);
+  locationX = Math.round(LOCATION_START.X + MAIN_PIN.WIDTH / 2);
+  locationY = Math.round(LOCATION_START.Y + MAIN_PIN.HEIGHT / 2);
 
   showAddress();
   disableInputForm();
