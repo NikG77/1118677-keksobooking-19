@@ -17,7 +17,7 @@
       x: evt.clientX,
       y: evt.clientY
     };
-    console.log(startCoords, startCoords.x);
+    // console.log(startCoords, startCoords.x);
     window.utils.showAddress(evt.clientX, evt.clientY);
 
 
