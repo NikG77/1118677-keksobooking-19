@@ -13,6 +13,7 @@
   var addressData = [];
   var locationX;
   var locationY;
+  var mapPinActive;
 
   var map = document.querySelector('.map');
   var buttonPin = map.querySelector('.map__pin');
@@ -42,6 +43,7 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
+  // Выводит на экран карточку объявления
   var renderCards = function (i) {
     var fragment = document.createDocumentFragment();
     fragment.appendChild(window.card.createCard(addressData[i]));
@@ -68,20 +70,27 @@
     window.utils.isEscEvent(evt, closePopup);
   };
 
-  // Закрывает popup: удаляет показанное объявление из разметки, удаляет обработчик ESC
+  // Закрывает popup: удаляет показанное объявление из разметки,
+  // удаляет обработчик ESC, удаляет класс map__pin--active и меняет
+  // статус возможности открытия объявления
   var closePopup = function () {
     document.querySelector('.popup').remove();
     document.removeEventListener('keydown', onPopupEscPress);
     openCardStatus = true;
+    mapPinActive.classList.remove('map__pin--active');
   };
 
-  // Выводит карточку на экран
+  // Выводит карточку на экран, активному элементу дает класс map__pin--active
+  // и запоминает статус возможного открытия окна
   var showCard = function (evt) {
     if (evt.target.closest('button') && evt.target.closest('button').tagName.toLowerCase() === 'button') {
       var dataIndex = evt.target.closest('button').dataset.index;
       if (openCardStatus && dataIndex) {
         renderCards(dataIndex);
         openCardStatus = false;
+        mapPinActive = evt.target.closest('button');
+        mapPinActive.classList.add('map__pin--active');
+
         // Включаю слушатель на закрытие по ESC
         document.addEventListener('keydown', onPopupEscPress);
 
