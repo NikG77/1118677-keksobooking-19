@@ -23,8 +23,8 @@
       }
     },
     // Показывает адрес текущей метки
-    showAddress: function (X, Y) {
-      document.querySelector('#address').value = X + ', ' + Y;
+    showAddress: function (x, y) {
+      document.querySelector('#address').value = Math.round(x) + ', ' + Math.round(y);
     },
     // Спрятать элемент, добавив класс  'hidden'
     hideElement: function (hideClass) {

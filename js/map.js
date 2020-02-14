@@ -122,7 +122,7 @@
     window.pin.renderPins(addressData);
 
     activateInputForm();
-    // locationY += Math.round(MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y);
+    locationY += MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y;
     window.utils.showAddress(locationX, locationY);
 
     buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
@@ -156,8 +156,8 @@
     }
   };
 
-  locationX = Math.round(LOCATION_START.X + MAIN_PIN.WIDTH / 2);
-  locationY = Math.round(LOCATION_START.Y + MAIN_PIN.HEIGHT / 2);
+  locationX = (LOCATION_START.X + MAIN_PIN.WIDTH / 2);
+  locationY = (LOCATION_START.Y + MAIN_PIN.HEIGHT / 2);
 
   window.utils.showAddress(locationX, locationY);
   disableInputForm();
@@ -167,6 +167,7 @@
     window.utils.isEnterEvent(evt, openMap);
 
   };
+
 
   // Активирует метку при нажатие основной кнопки мыши
   buttonPinMain.addEventListener('mousedown', function (evt) {

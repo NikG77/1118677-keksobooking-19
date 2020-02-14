@@ -17,15 +17,14 @@
       x: evt.clientX,
       y: evt.clientY
     };
-    // console.log(startCoords, startCoords.x);
-    window.utils.showAddress(evt.clientX, evt.clientY);
+    console.log(startCoords, startCoords.x);
+    window.utils.showAddress(startCoords.x, startCoords.y);
 
-
-    var dragged = false;
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      dragged = true;
+
+      // if
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -46,14 +45,6 @@
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-
-      if (dragged) {
-        var onClickPreventDefault = function (clickEvt) {
-          clickEvt.preventDefault();
-          buttonPinMain.removeEventListener('click', onClickPreventDefault);
-        };
-        buttonPinMain.addEventListener('click', onClickPreventDefault);
-      }
 
     };
 
