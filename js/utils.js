@@ -6,6 +6,8 @@
   var ENTER_KEYCODE = 13;
   var MOUSE_MAIN_CLICK = 0;
 
+  var map = document.querySelector('.map');
+
   window.utils = {
     isEscEvent: function (evt, action) {
       if (evt.keyCode === ESC_KEYCODE) {
@@ -24,8 +26,28 @@
     },
     // Показывает адрес текущей метки
     showAddress: function (x, y) {
+      var indents = map.getBoundingClientRect();
+      var buttonPinMain = map.querySelector('.map__pin--main');
+      var offsetX = buttonPinMain.offsetWidth / 2;
+      var offsetY;
 
-      document.querySelector('#address').value = Math.round(x) + ', ' + Math.round(y);
+
+      if (window.data.flagOpenMap) {
+        console.log('окно открыто');
+        offsetY = buttonPinMain.offsetHeight;
+      } else {
+        console.log('окно закрыто');
+        offsetY = buttonPinMain.offsetHeight / 2;
+      }
+
+      var indents = map.getBoundingClientRect().x;
+      console.log('indentsX', indents);
+      console.log('левая Х ', x, 'указательХ ', x + offsetX, 'Yверхняя ', y, 'метка у ', y + offsetY);
+      console.log('buttonPinMain.offsetLeft=', buttonPinMain.offsetLeft);
+      console.log('buttonPinMain.offsetTop=', buttonPinMain.offsetTop);
+      // console.log('вычисляемая середина', Math.round(x - indents.x + offsetX), '  ', Math.round(y - indents.y + offsetY));
+      // document.querySelector('#address').value = Math.round(x - indents.x + offsetX) + ',! ' + Math.round(y - indents.x + offsetY);
+      document.querySelector('#address').value = Math.round(buttonPinMain.offsetLeft + offsetX) + ', ' + Math.round(buttonPinMain.offsetTop + offsetY);
     },
     // Спрятать элемент, добавив класс  'hidden'
     hideElement: function (hideClass) {

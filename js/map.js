@@ -3,20 +3,10 @@
 (function () {
   // var NUMBER_DATA = 8;
   var URL = 'https://js.dump.academy/keksobooking/data';
-  var MAIN_PIN = {
-    WIDTH: 65,
-    HEIGHT: 65,
-    POINTER_Y: 22
-  };
-  var LOCATION_START = {
-    X: 570,
-    Y: 375,
-  };
 
   var openCardStatus = true;
   var addressData = [];
-  var locationX;
-  var locationY;
+
   var mapPinActive;
 
   var map = document.querySelector('.map');
@@ -61,7 +51,7 @@
   };
 
   // Получает данные с сервера
-  window.backend.load(URL, onLoad, onError);
+  // window.backend.load(URL, onLoad, onError);
 
   // Обработчик закрытия окна карточки ESC
   var onPopupEscPress = function (evt) {
@@ -81,15 +71,16 @@
   // Выводит карточку на экран, активному элементу дает класс map__pin--active
   // и запоминает статус возможного открытия окна
   var showCard = function (evt) {
-    if (evt.target.closest('button') && evt.target.closest('button').tagName.toLowerCase() === 'button') {
-      var dataIndex = evt.target.closest('button').dataset.index;
+    var mapPinTest = evt.target.closest('button');
+    if (mapPinTest && mapPinTest.tagName.toLowerCase() === 'button') {
+      var dataIndex = mapPinTest.dataset.index;
       if (dataIndex) {
         if (!openCardStatus) {
           closePopup();
         }
         renderCards(dataIndex);
         openCardStatus = false;
-        mapPinActive = evt.target.closest('button');
+        mapPinActive = mapPinTest;
         mapPinActive.classList.add('map__pin--active');
 
         // Включаю слушатель на закрытие по ESC
@@ -118,14 +109,18 @@
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
 
+    // Меняем флаг открытия окна
+    window.data.flagOpenMap = true;
+
     // Отрисовывает метки из базы данных
     window.pin.renderPins(addressData);
 
     activateInputForm();
-    locationY += MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y;
-    window.utils.showAddress(locationX, locationY);
+    // locationY += MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y;
+    window.utils.showAddress(window.data.LOCATION_START.X, window.data.LOCATION_START.Y);
 
     buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
+    buttonPinMain.removeEventListener('mousedown', onOpenMapMouseMainClick);
   };
 
   // Добавляет в 'ad-form' всем  input и select disabled
@@ -156,23 +151,26 @@
     }
   };
 
-  locationX = (LOCATION_START.X + MAIN_PIN.WIDTH / 2);
-  locationY = (LOCATION_START.Y + MAIN_PIN.HEIGHT / 2);
+  // Вычисляется адресс метки со смещение по метке до активации
+  // locationX = (LOCATION_START.X + 0 / 2);
+  // locationY = (LOCATION_START.Y + 0 / 2);
 
-  window.utils.showAddress(locationX, locationY);
+  window.utils.showAddress(window.data.LOCATION_START.X, window.data.LOCATION_START.Y);
   disableInputForm();
 
-  // Обработчик открытия окна
+  // Обработчик открытия окна по Enter
   var onOpenMapEnterPress = function (evt) {
     window.utils.isEnterEvent(evt, openMap);
+  };
 
+  // Обработчик открытия окна по Enter
+  var onOpenMapMouseMainClick = function (evt) {
+    window.utils.isMouseMainClickEvent(evt, openMap);
   };
 
 
   // Активирует метку при нажатие основной кнопки мыши
-  buttonPinMain.addEventListener('mousedown', function (evt) {
-    window.utils.isMouseMainClickEvent(evt, openMap);
-  });
+  buttonPinMain.addEventListener('mousedown', onOpenMapMouseMainClick);
 
   // Активирует метку при нажатие Enter
   buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
