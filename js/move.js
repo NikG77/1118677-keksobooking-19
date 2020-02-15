@@ -1,18 +1,35 @@
 'use strict';
 
+// Перемещение основной метки
 (function () {
-  // Перемещение диалогового окна
-
   var map = document.querySelector('.map');
   var buttonPinMain = map.querySelector('.map__pin--main');
   var offsetX = buttonPinMain.offsetWidth / 2;
   var offsetY = buttonPinMain.offsetHeight;
-
-
-  // var setupSubmit = setup.querySelector('.setup-submit');
+  var LIMIT = {
+    MIN_X: 0,
+    MAX_X: 1200,
+    MIN_Y: 130,
+    MAX_Y: 630
+  };
 
   buttonPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
+
+    // Ограничает размеры согласно мин максимальным и размера смещения
+    var limitSize = function (x, min, max, offset) {
+      var minX = min - offset;
+      var maxX = max - offset;
+      var newX;
+      if (x < minX) {
+        newX = minX;
+      } else if (x > maxX) {
+        newX = maxX;
+      } else {
+        newX = x;
+      }
+      return newX;
+    };
 
     var startCoords = {
       x: evt.clientX,
@@ -22,85 +39,23 @@
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      /*
-      var limitSizeX = function (x, min, max) {
-        var indents = map.getBoundingClientRect().x;
-        console.log('indentsX', indents);
-        var minX = min + indents + offsetX;
-        var maxX = max + indents - offsetX;
-        var newX;
-        if (x < minX) {
-          newX = minX;
-        } else if (x > maxX) {
-          newX = maxX;
-        } else {
-          newX = x;
-        }
-        return newX;
-      };
-
-      var limitSizeY = function (y, min, max) {
-        var minY = min - offsetY;
-        var maxY = max - offsetY;
-        var newY;
-        if (y < minY) {
-          newY = minY;
-        } else if (y > maxY) {
-          newY = maxY;
-        } else {
-          newY = y;
-        }
-        console.log('координата y ', y);
-        return newY;
-      };
-
-      var finishX = limitSizeX(moveEvt.clientX, 0, 1200);
-      var finishY = limitSizeY(moveEvt.clientY, 300, 500);
-      */
-
-      var finishX = moveEvt.clientX;
-      var finishY = moveEvt.clientY;
-
       var shift = {
-        x: startCoords.x - finishX,
-        y: startCoords.y - finishY
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
       };
 
       startCoords = {
-        x: finishX,
-        y: finishY
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
       };
 
-      console.log('buttonPinMain.offsetLeft=', buttonPinMain.offsetLeft);
-      console.log('buttonPinMain.offsetTop=', buttonPinMain.offsetTop);
-      var limitSize = function (x, min, max, offset) {
-        // var indents = map.getBoundingClientRect().x;
-        // console.log('indentsX', indents);
-        var minX = min - offset;
-        var maxX = max - offset;
-        var newX;
-        if (x < minX) {
-          newX = minX;
-        } else if (x > maxX) {
-          newX = maxX;
-        } else {
-          newX = x;
-        }
-        return newX;
-      };
-
-      var PinMainY = limitSize(buttonPinMain.offsetTop - shift.y, 130, 650, offsetY);
-      var PinMainX = limitSize(buttonPinMain.offsetLeft - shift.x, 0, 1200, offsetX);
-
+      var PinMainX = limitSize(buttonPinMain.offsetLeft - shift.x, LIMIT.MIN_X, LIMIT.MAX_X, offsetX);
+      var PinMainY = limitSize(buttonPinMain.offsetTop - shift.y, LIMIT.MIN_Y, LIMIT.MAX_Y, offsetY);
 
       buttonPinMain.style.top = PinMainY + 'px';
       buttonPinMain.style.left = PinMainX + 'px';
 
-      // console.log('финиш ' + startCoords.x, startCoords.y);
-      window.utils.showAddress(startCoords.x, startCoords.y);
-
-      console.log('после buttonPinMain.offsetLeft=', buttonPinMain.offsetLeft);
-      console.log('после buttonPinMain.offsetTop=', buttonPinMain.offsetTop);
+      window.utils.showAddress();
     };
 
     var onMouseUp = function (upEvt) {
@@ -114,16 +69,5 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-
-  // При закрытии окна сбрасывает сдвиг смещения окна
-  /*
-  var onCloseDialog = function () {
-    setup.style.top = null;
-    setup.style.left = null;
-  };
-  */
-
-  // setupClose.addEventListener('click', onCloseDialog);
-  // setupSubmit.addEventListener('click', onCloseDialog);
 
 })();

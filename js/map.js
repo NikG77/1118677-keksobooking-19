@@ -51,7 +51,7 @@
   };
 
   // Получает данные с сервера
-  // window.backend.load(URL, onLoad, onError);
+  window.backend.load(URL, onLoad, onError);
 
   // Обработчик закрытия окна карточки ESC
   var onPopupEscPress = function (evt) {
@@ -116,8 +116,7 @@
     window.pin.renderPins(addressData);
 
     activateInputForm();
-    // locationY += MAIN_PIN.HEIGHT / 2 + MAIN_PIN.POINTER_Y;
-    window.utils.showAddress(window.data.LOCATION_START.X, window.data.LOCATION_START.Y);
+    window.utils.showAddress();
 
     buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
     buttonPinMain.removeEventListener('mousedown', onOpenMapMouseMainClick);
@@ -151,11 +150,7 @@
     }
   };
 
-  // Вычисляется адресс метки со смещение по метке до активации
-  // locationX = (LOCATION_START.X + 0 / 2);
-  // locationY = (LOCATION_START.Y + 0 / 2);
-
-  window.utils.showAddress(window.data.LOCATION_START.X, window.data.LOCATION_START.Y);
+  window.utils.showAddress();
   disableInputForm();
 
   // Обработчик открытия окна по Enter
