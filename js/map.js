@@ -1,11 +1,14 @@
 'use strict';
 
 (function () {
-  // var NUMBER_DATA = 8;
+  var NUMBER_PIN_SHOW = 5;
   var URL = 'https://js.dump.academy/keksobooking/data';
 
   var openCardStatus = true;
-  var addressData = [];
+  window.map = {
+    addressData: [],
+  };
+  var addressDataCopy = [];
 
   var mapPinActive;
 
@@ -34,7 +37,7 @@
   // Выводит на экран карточку объявления
   var renderCards = function (i) {
     var fragment = document.createDocumentFragment();
-    fragment.appendChild(window.card.createCard(addressData[i]));
+    fragment.appendChild(window.card.createCard(addressDataCopy[i]));
     map.insertBefore(fragment, map.querySelector('.map__filters-container'));
   };
 
@@ -44,7 +47,7 @@
     var j = 0;
     for (var i = 0; i < onloadData.length; i++) {
       if (onloadData[i]['offer']) {
-        addressData[j] = onloadData[i];
+        window.map.addressData[j] = onloadData[i];
         j++;
       }
     }
@@ -112,8 +115,11 @@
     // Меняем флаг открытия окна
     window.data.flagOpenMap = true;
 
+    // Создает новый массив с заданным кол-вом меток NUMBER_PIN_SHOW
+    addressDataCopy = window.map.addressData.slice(0, NUMBER_PIN_SHOW);
+
     // Отрисовывает метки из базы данных
-    window.pin.renderPins(addressData);
+    window.pin.renderPins(addressDataCopy);
 
     activateInputForm();
     window.utils.showAddress();
@@ -170,5 +176,23 @@
   // Активирует метку при нажатие Enter
   buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
 
+
+  var filters = document.querySelector('.map__filters');
+  var housingTypeFilter = filters.querySelector('#housing-type');
+
+  housingTypeFilter.addEventListener('change', function () {
+    if (!openCardStatus) {
+      closePopup();
+    }
+    var filterHouseAddressData = [];
+    if (housingTypeFilter.value === 'any') {
+      filterHouseAddressData = window.map.addressData;
+    } else {
+      filterHouseAddressData = window.map.addressData.filter(function (data) {
+        return data.offer.type === housingTypeFilter.value;
+      });
+    }
+    window.pin.renderPins(filterHouseAddressData.slice(0, NUMBER_PIN_SHOW));
+  });
 
 })();
