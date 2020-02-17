@@ -4,7 +4,7 @@
   var NUMBER_PIN_SHOW = 5;
   var URL = 'https://js.dump.academy/keksobooking/data';
 
-  var openCardStatus = true;
+  var openCardStatus = false;
 
   var addressData = [];
   var addressDataCopy = [];
@@ -66,7 +66,7 @@
   var closePopup = function () {
     document.querySelector('.popup').remove();
     document.removeEventListener('keydown', onPopupEscPress);
-    openCardStatus = true;
+    openCardStatus = false;
     mapPinActive.classList.remove('map__pin--active');
   };
 
@@ -77,11 +77,11 @@
     if (mapPinTest && mapPinTest.tagName.toLowerCase() === 'button') {
       var dataIndex = mapPinTest.dataset.index;
       if (dataIndex) {
-        if (!openCardStatus) {
+        if (openCardStatus) {
           closePopup();
         }
         renderCards(dataIndex);
-        openCardStatus = false;
+        openCardStatus = true;
         mapPinActive = mapPinTest;
         mapPinActive.classList.add('map__pin--active');
 
@@ -116,8 +116,6 @@
 
     // Создает новый массив с заданным кол-вом меток NUMBER_PIN_SHOW
     addressDataCopy = addressData.slice();
-    //
-    console.log('копия', addressDataCopy, 'оргинал', addressData);
 
     // Отрисовывает метки из базы данных
     window.pin.renderPins(addressDataCopy.slice(0, NUMBER_PIN_SHOW));
@@ -177,31 +175,10 @@
   // Активирует метку при нажатие Enter
   buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
 
-
-  var filters = document.querySelector('.map__filters');
-  var housingTypeFilter = filters.querySelector('#housing-type');
-
-  housingTypeFilter.addEventListener('change', function () {
-    console.log('Cверяем с ', housingTypeFilter.value);
-    if (!openCardStatus) {
-      closePopup();
-    }
-
-
-    addressDataCopy = [];
-    if (housingTypeFilter.value === 'any') {
-      addressDataCopy = window.map.addressData;
-    } else {
-      addressDataCopy = addressData.filter(function (data) {
-        console.log('сравнение фильтров', data.offer.type, housingTypeFilter.value);
-        return data.offer.type === housingTypeFilter.value;
-      });
-    }
-
-    console.log(addressDataCopy);
-    window.pin.renderPins(addressDataCopy);
-
-
-  });
+  window.map = {
+    closePopup: closePopup(),
+    openCardStatus: openCardStatus,
+    addressData: addressData,
+  };
 
 })();
