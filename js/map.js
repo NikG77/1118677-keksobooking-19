@@ -5,9 +5,8 @@
   var URL = 'https://js.dump.academy/keksobooking/data';
 
   var openCardStatus = true;
-  window.map = {
-    addressData: [],
-  };
+
+  var addressData = [];
   var addressDataCopy = [];
 
   var mapPinActive;
@@ -47,7 +46,7 @@
     var j = 0;
     for (var i = 0; i < onloadData.length; i++) {
       if (onloadData[i]['offer']) {
-        window.map.addressData[j] = onloadData[i];
+        addressData[j] = onloadData[i];
         j++;
       }
     }
@@ -116,10 +115,12 @@
     window.data.flagOpenMap = true;
 
     // Создает новый массив с заданным кол-вом меток NUMBER_PIN_SHOW
-    addressDataCopy = window.map.addressData.slice(0, NUMBER_PIN_SHOW);
+    addressDataCopy = addressData.slice();
+    //
+    console.log('копия', addressDataCopy, 'оргинал', addressData);
 
     // Отрисовывает метки из базы данных
-    window.pin.renderPins(addressDataCopy);
+    window.pin.renderPins(addressDataCopy.slice(0, NUMBER_PIN_SHOW));
 
     activateInputForm();
     window.utils.showAddress();
@@ -181,18 +182,26 @@
   var housingTypeFilter = filters.querySelector('#housing-type');
 
   housingTypeFilter.addEventListener('change', function () {
+    console.log('Cверяем с ', housingTypeFilter.value);
     if (!openCardStatus) {
       closePopup();
     }
-    var filterHouseAddressData = [];
+
+
+    addressDataCopy = [];
     if (housingTypeFilter.value === 'any') {
-      filterHouseAddressData = window.map.addressData;
+      addressDataCopy = window.map.addressData;
     } else {
-      filterHouseAddressData = window.map.addressData.filter(function (data) {
+      addressDataCopy = addressData.filter(function (data) {
+        console.log('сравнение фильтров', data.offer.type, housingTypeFilter.value);
         return data.offer.type === housingTypeFilter.value;
       });
     }
-    window.pin.renderPins(filterHouseAddressData.slice(0, NUMBER_PIN_SHOW));
+
+    console.log(addressDataCopy);
+    window.pin.renderPins(addressDataCopy);
+
+
   });
 
 })();
