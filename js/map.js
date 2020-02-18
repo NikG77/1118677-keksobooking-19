@@ -176,7 +176,7 @@
   buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
 
   window.map = {
-    closePopup: closePopup(),
+    closePopup: closePopup,
     openCardStatus: openCardStatus,
     addressData: addressData,
   };
