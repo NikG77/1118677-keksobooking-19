@@ -1,11 +1,7 @@
 'use strict';
 
 (function () {
-  // var NUMBER_DATA = 8;
   var URL = 'https://js.dump.academy/keksobooking/data';
-
-  var openCardStatus = true;
-  var addressData = [];
 
   var mapPinActive;
 
@@ -33,8 +29,9 @@
 
   // Выводит на экран карточку объявления
   var renderCards = function (i) {
+    window.map.openCardStatus = true;
     var fragment = document.createDocumentFragment();
-    fragment.appendChild(window.card.createCard(addressData[i]));
+    fragment.appendChild(window.card.createCard(window.map.addressDataCopy[i]));
     map.insertBefore(fragment, map.querySelector('.map__filters-container'));
   };
 
@@ -44,7 +41,7 @@
     var j = 0;
     for (var i = 0; i < onloadData.length; i++) {
       if (onloadData[i]['offer']) {
-        addressData[j] = onloadData[i];
+        window.map.addressData[j] = onloadData[i];
         j++;
       }
     }
@@ -64,7 +61,7 @@
   var closePopup = function () {
     document.querySelector('.popup').remove();
     document.removeEventListener('keydown', onPopupEscPress);
-    openCardStatus = true;
+    window.map.openCardStatus = false;
     mapPinActive.classList.remove('map__pin--active');
   };
 
@@ -75,11 +72,10 @@
     if (mapPinTest && mapPinTest.tagName.toLowerCase() === 'button') {
       var dataIndex = mapPinTest.dataset.index;
       if (dataIndex) {
-        if (!openCardStatus) {
+        if (window.map.openCardStatus) {
           closePopup();
         }
         renderCards(dataIndex);
-        openCardStatus = false;
         mapPinActive = mapPinTest;
         mapPinActive.classList.add('map__pin--active');
 
@@ -112,8 +108,11 @@
     // Меняем флаг открытия окна
     window.data.flagOpenMap = true;
 
+    // Создает новый массив с заданным кол-вом меток NUMBER_PIN_SHOW
+    window.map.addressDataCopy = window.map.addressData.slice();
+
     // Отрисовывает метки из базы данных
-    window.pin.renderPins(addressData);
+    window.pin.renderPins(window.map.addressDataCopy.slice(0, window.data.NUMBER_PIN_SHOW));
 
     activateInputForm();
     window.utils.showAddress();
@@ -163,12 +162,17 @@
     window.utils.isMouseMainClickEvent(evt, openMap);
   };
 
-
   // Активирует метку при нажатие основной кнопки мыши
   buttonPinMain.addEventListener('mousedown', onOpenMapMouseMainClick);
 
   // Активирует метку при нажатие Enter
   buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
 
+  window.map = {
+    closePopup: closePopup,
+    openCardStatus: false,
+    addressData: [],
+    addressDataCopy: [],
+  };
 
 })();

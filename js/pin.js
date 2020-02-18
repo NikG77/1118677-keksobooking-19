@@ -7,7 +7,7 @@
   };
 
   var similarPinTemplate = document.querySelector('#pin').content;
-  var similarPinElement = document.querySelector('.map').querySelector('.map__pins');
+
 
   // Создает pin с адресом, аватором на img и alt для img
   var createPin = function (address, i) {
@@ -23,12 +23,20 @@
     return addressElement;
   };
 
+
   // Выводит в разметку созданные метки
   window.pin = {
-    renderPins: function (addressData) {
+    renderPins: function (data) {
+      var similarPinElement = document.querySelector('.map').querySelector('.map__pins');
+      var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+      for (var j = 0; j < mapPins.length; j++) {
+        similarPinElement.removeChild(mapPins[j]);
+      }
+
       var fragment = document.createDocumentFragment();
-      for (var i = 0; i < addressData.length; i++) {
-        fragment.appendChild(createPin(addressData[i], i));
+      for (var i = 0; i < data.length; i++) {
+        fragment.appendChild(createPin(data[i], i));
       }
       similarPinElement.appendChild(fragment);
     }

@@ -3,6 +3,7 @@
 (function () {
 
   window.data = {
+    NUMBER_PIN_SHOW: 5,
 
     // Для "переводчика"
     typeHouse: {
@@ -12,20 +13,7 @@
       bungalo: 'Бунгало'
     },
 
-    // Размеры основного пина и указателя
-    MAIN_PIN: {
-      WIDTH: 65,
-      HEIGHT: 65,
-      POINTER_Y: 22
-    },
-
-    // Начальная точка основного пина по style
-    LOCATION_START: {
-      X: 570,
-      Y: 375,
-    },
-
-    // Флаг активо окно или нет
+    // Флаг активно окно или нет
     flagOpenMap: false,
   };
 })();
