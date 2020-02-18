@@ -181,7 +181,7 @@
     addressDataCopy: addressDataCopy,
   };
 
-
+  /*
   // Перенес этот блок из фильтра и поменял
   // window.map.openCardStatus на openCardStatus
   // и тогда работает
@@ -206,5 +206,6 @@
 
     window.pin.renderPins(addressDataCopy.slice(0, window.data.NUMBER_PIN_SHOW));
   });
+  */
 
 })();

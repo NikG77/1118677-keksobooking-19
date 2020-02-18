@@ -4,7 +4,7 @@
   var filters = document.querySelector('.map__filters');
   var filterTypeOfHouse = filters.querySelector('#housing-type');
 
-  /*
+
   // Фильтрация по типу жилья
   filterTypeOfHouse.addEventListener('change', function () {
     if (window.map.openCardStatus) {
@@ -22,5 +22,5 @@
     window.pin.renderPins(window.map.addressDataCopy.slice(0, window.data.NUMBER_PIN_SHOW));
 
   });
-    */
+
 })();
