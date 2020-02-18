@@ -178,7 +178,9 @@
     closePopup: closePopup,
     openCardStatus: openCardStatus,
     addressData: addressData,
+    addressDataCopy: addressDataCopy,
   };
+
 
   // Перенес этот блок из фильтра и поменял
   // window.map.openCardStatus на openCardStatus
@@ -193,7 +195,7 @@
     if (openCardStatus) {
       window.map.closePopup();
     }
-    addressDataCopy = [];
+    // addressDataCopy = [];
     if (filterTypeOfHouse.value === 'any') {
       addressDataCopy = window.map.addressData;
     } else {
