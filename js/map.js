@@ -3,11 +3,6 @@
 (function () {
   var URL = 'https://js.dump.academy/keksobooking/data';
 
-  // window.map.openCardStatus = false;
-
-  // var addressData = [];
-  // var addressDataCopy = [];
-
   var mapPinActive;
 
   var map = document.querySelector('.map');
