@@ -1,9 +1,8 @@
 'use strict';
-// Работает с фильтрами
+// Фильтры
 (function () {
   var filters = document.querySelector('.map__filters');
   var filterTypeOfHouse = filters.querySelector('#housing-type');
-
 
   // Фильтрация по типу жилья
   filterTypeOfHouse.addEventListener('change', function () {
