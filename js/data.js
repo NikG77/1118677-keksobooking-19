@@ -3,6 +3,7 @@
 (function () {
 
   window.data = {
+    NUMBER_PIN_SHOW: 5,
 
     // Для "переводчика"
     typeHouse: {

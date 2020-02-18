@@ -19,7 +19,7 @@
       });
     }
 
-    window.pin.renderPins(addressDataCopy.slice(0, 5));
+    window.pin.renderPins(addressDataCopy.slice(0, window.data.NUMBER_PIN_SHOW));
 
   });
 

@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var NUMBER_PIN_SHOW = 5;
   var URL = 'https://js.dump.academy/keksobooking/data';
 
   var openCardStatus = false;
@@ -118,7 +117,7 @@
     addressDataCopy = addressData.slice();
 
     // Отрисовывает метки из базы данных
-    window.pin.renderPins(addressDataCopy.slice(0, NUMBER_PIN_SHOW));
+    window.pin.renderPins(addressDataCopy.slice(0, window.data.NUMBER_PIN_SHOW));
 
     activateInputForm();
     window.utils.showAddress();
