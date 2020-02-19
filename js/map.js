@@ -1,7 +1,9 @@
 'use strict';
 
 (function () {
-  var URL = 'https://js.dump.academy/keksobooking/data';
+  var URL_DATA = 'https://js.dump.academy/keksobooking/data';
+  var URL_FORM = 'https://js.dump.academy/keksobooking';
+
 
   var mapPinActive;
 
@@ -48,7 +50,7 @@
   };
 
   // Получает данные с сервера
-  window.backend.load(URL, onLoad, onError);
+  window.backend.load(URL_DATA, onLoad, onError);
 
   // Обработчик закрытия окна карточки ESC
   var onPopupEscPress = function (evt) {
@@ -167,6 +169,22 @@
 
   // Активирует метку при нажатие Enter
   buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
+
+  var onLoadForm = function () {
+
+  };
+
+  var onErrorForm = function () {
+
+  };
+
+  // Обработчик отправки формы
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    formButton.textContent = 'Данные отправляются ...';
+    window.backend.save(URL_FORM, new FormData(form), onLoadForm, onErrorForm);
+
+  });
 
   window.map = {
     closePopup: closePopup,
