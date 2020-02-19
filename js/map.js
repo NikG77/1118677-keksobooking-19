@@ -171,10 +171,15 @@
   buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
 
   var onLoadForm = function () {
+    disableInputForm();
+    map.classList.add('map--faded');
+
+    form.classList.add('ad-form--disabled');
 
   };
 
   var onErrorForm = function () {
+
 
   };
 
