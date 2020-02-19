@@ -25,10 +25,15 @@
     }
   });
 
-  var fileChooser = document.querySelector('.ad-form__uploud input[type=file]');
+  var fileChooser = document.querySelector('.ad-form__upload input[type=file]');
   var preview = document.querySelector('.ad-form__photo');
 
+  var i = 0;
+  var newElementImg = [];
+
+
   fileChooser.addEventListener('change', function () {
+
     var file = fileChooser.files[0];
     var fileName = file.name.toLowerCase();
 
@@ -38,12 +43,16 @@
 
     if (matches) {
       var reader = new FileReader();
-      var newElementImg;
 
       reader.addEventListener('load', function () {
-        newElementImg = '<img alt="Фотография жилья" width="70" height="70">';
-        preview.appendChild(newElementImg);
+        newElementImg[i] = document.createElement('img');
+        newElementImg[i].dataset.index = i;
+        preview.insertBefore(newElementImg[i], preview.childNodes[0]);
+        preview.querySelector('img').alt = 'Фотография жилья N' + (i + 1);
+        preview.querySelector('img').width = '70';
+        preview.querySelector('img').height = '70';
         preview.querySelector('img').src = reader.result;
+        i++;
       });
 
       reader.readAsDataURL(file);
