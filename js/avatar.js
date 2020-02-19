@@ -49,8 +49,8 @@
         newElementImg[i].dataset.index = i;
         preview.insertBefore(newElementImg[i], preview.childNodes[0]);
         preview.querySelector('img').alt = 'Фотография жилья N' + (i + 1);
-        preview.querySelector('img').width = '70';
-        preview.querySelector('img').height = '70';
+        preview.querySelector('img').width = '60';
+        preview.querySelector('img').height = '60';
         preview.querySelector('img').src = reader.result;
         i++;
       });
