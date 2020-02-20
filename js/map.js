@@ -104,12 +104,6 @@
     activateFilterForm();
   };
 
-
-  // Обработчик закрытия окна карточки ESC
-  var onPopupEscPress = function (evt) {
-    window.utils.isEscEvent(evt, closePopup);
-  };
-
   // Закрывает popup: удаляет показанное объявление из разметки,
   // удаляет обработчик ESC, удаляет класс map__pin--active и меняет
   // статус возможности открытия объявления
@@ -118,6 +112,11 @@
     document.removeEventListener('keydown', onPopupEscPress);
     window.map.openCardStatus = false;
     mapPinActive.classList.remove('map__pin--active');
+  };
+
+  // Обработчик закрытия окна карточки ESC
+  var onPopupEscPress = function (evt) {
+    window.utils.isEscEvent(evt, closePopup);
   };
 
   // Выводит карточку на экран, активному элементу дает класс map__pin--active
@@ -204,7 +203,15 @@
       closePopup();
     }
     window.data.flagOpenMap = false;
+    // Перезаписываем изначальный аватар
+    document.querySelector('.ad-form-header__preview img').src = 'img/muffin-grey.svg';
 
+    var preview = document.querySelector('.ad-form__photo');
+    var previewImg = preview.querySelectorAll('img');
+    // Удаляет загруженные фото из DOM
+    previewImg.forEach(function (element) {
+      preview.removeChild(element);
+    });
 
     disableInputForm();
     disableFilterForm();
@@ -219,12 +226,46 @@
     window.utils.showAddress();
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
+  };
 
+  var closePopupSuccessLoad = function () {
+    document.querySelector('.success').remove();
+    document.removeEventListener('keydown', onSuccessLoadEscPress);
+    document.removeEventListener('click', onSuccessLoadClickOutPress);
+
+  };
+
+  var onSuccessLoadEscPress = function (evt) {
+    window.utils.isEscEvent(evt, closePopupSuccessLoad);
+  };
+
+  var onSuccessLoadClickOutPress = function (evt) {
+    var targetSuccess = evt.target.closest('.success');
+
+    console.log('evt=', evt, 'evt.targey=', targetSuccess);
+    
+    if (targetSuccess === '.success') {
+      console.log('Работает');
+
+    }
   };
 
   // Успешная отправка форм
   var onLoadForm = function () {
     resetForm();
+
+    // Выводит по шаблону сообщение об успешной отправки формы
+    var successTemplate = document.querySelector('#success').content;
+    var main = document.querySelector('main');
+    var successElement = successTemplate.cloneNode(true);
+    main.appendChild(successElement);
+
+    // Слушатель на закрытие сообщения успешной отправки
+    document.addEventListener('keydown', onSuccessLoadEscPress);
+
+    // Слушатель по клику вне окна
+    document.addEventListener('click', onSuccessLoadClickOutPress);
+    console.log('Запустил');
 
   };
 
