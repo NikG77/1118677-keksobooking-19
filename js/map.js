@@ -6,15 +6,63 @@
 
 
   var mapPinActive;
+  var PIN_MAIN = {};
 
   var map = document.querySelector('.map');
   var buttonPinMain = map.querySelector('.map__pin--main');
 
   var form = document.querySelector('.ad-form');
-  var formInput = form.querySelectorAll('input');
-  var formSelect = form.querySelectorAll('select');
-  var formTextarea = form.querySelector('textarea');
+  var formFieldset = document.querySelectorAll('.fieldset');
+  // var formSelect = form.querySelectorAll('select');
+  // var formTextarea = form.querySelector('textarea');
   var formButton = form.querySelectorAll('.ad-form__submit');
+
+  var formFilters = document.querySelector('.map__filters');
+  var formFiltersSelect = formFilters.querySelectorAll('select');
+  var formFiltersFieldset = formFilters.querySelector('fieldset');
+
+
+  // Добавляет в form .map__filters всем select и fieldset disabled
+  var disableFilterForm = function () {
+    disablePartForm(formFiltersSelect);
+    disablePartForm(formFiltersFieldset);
+  };
+
+  // Удаляет в form .map__filters всем select и fieldset disabled
+  var activateFilterForm = function () {
+    activatePartForm(formFiltersSelect);
+    activatePartForm(formFiltersFieldset);
+  };
+
+  // Добавляет в 'ad-form' всем  input и select disabled
+  var disableInputForm = function () {
+    // disablePartForm(formInput);
+    // disablePartForm(formSelect);
+    // disablePartForm(formTextarea);
+    // disablePartForm(formButton);
+    disablePartForm(formFieldset);
+  };
+
+  var disablePartForm = function (partForm) {
+    for (var i = 0; i < partForm.length; i++) {
+      partForm[i].disabled = true;
+    }
+  };
+
+  // Удаляет из 'ad-form' fieldset disabled
+  var activateInputForm = function () {
+    // activatePartForm(formInput);
+    // activatePartForm(formSelect);
+    // activatePartForm(formTextarea);
+    // activatePartForm(formButton);
+    activatePartForm(formFieldset);
+  };
+
+  var activatePartForm = function (partForm) {
+    for (var i = 0; i < partForm.length; i++) {
+      partForm[i].disabled = false;
+    }
+  };
 
   // Выводит в созданный div информацию об ошибке
   var onError = function (errorMessage) {
@@ -47,10 +95,15 @@
         j++;
       }
     }
+
+    // Создает новый массив с заданным кол-вом меток NUMBER_PIN_SHOW
+    window.map.addressDataCopy = window.map.addressData.slice();
+
+    // Отрисовывает метки из базы данных
+    window.pin.renderPins(window.map.addressDataCopy.slice(0, window.data.NUMBER_PIN_SHOW));
+    activateFilterForm();
   };
 
-  // Получает данные с сервера
-  window.backend.load(URL_DATA, onLoad, onError);
 
   // Обработчик закрытия окна карточки ESC
   var onPopupEscPress = function (evt) {
@@ -93,6 +146,29 @@
     }
   };
 
+  // Активизирует карту, показывает обновленный адрес со сдвигом на метку
+  var openMap = function () {
+    map.classList.remove('map--faded');
+    form.classList.remove('ad-form--disabled');
+
+    // Меняем флаг открытия окна
+    window.data.flagOpenMap = true;
+
+    // Получает данные с сервера
+    window.backend.load(URL_DATA, onLoad, onError);
+
+    activateInputForm();
+    window.utils.showAddress();
+
+    // Запоминаем расположение основной метки
+    PIN_MAIN.X = buttonPinMain.style.left;
+    PIN_MAIN.Y = buttonPinMain.style.top;
+
+    // Обработчики закрытия окна - не оставляю из-за повторного открытия
+    // buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
+    // buttonPinMain.removeEventListener('mousedown', onOpenMapMouseMainClick);
+  };
+
   // Активирует карточку объявления при клике на метку на блок map__pins через делегирование
   var setupOpenCard = map.querySelector('.map__pins');
   setupOpenCard.addEventListener('click', showCard);
@@ -102,57 +178,10 @@
     window.utils.isEnterEvent(evt, showCard);
   });
 
-  // Активизирует карту, показывает обновленный адрес со сдвигом на метку
-  var openMap = function () {
-    map.classList.remove('map--faded');
-    form.classList.remove('ad-form--disabled');
-
-    // Меняем флаг открытия окна
-    window.data.flagOpenMap = true;
-
-    // Создает новый массив с заданным кол-вом меток NUMBER_PIN_SHOW
-    window.map.addressDataCopy = window.map.addressData.slice();
-
-    // Отрисовывает метки из базы данных
-    window.pin.renderPins(window.map.addressDataCopy.slice(0, window.data.NUMBER_PIN_SHOW));
-
-    activateInputForm();
-    window.utils.showAddress();
-
-    buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
-    buttonPinMain.removeEventListener('mousedown', onOpenMapMouseMainClick);
-  };
-
-  // Добавляет в 'ad-form' всем  input и select disabled
-  var disableInputForm = function () {
-    disablePartForm(formInput);
-    disablePartForm(formSelect);
-    disablePartForm(formTextarea);
-    disablePartForm(formButton);
-  };
-
-  var disablePartForm = function (partForm) {
-    for (var i = 0; i < partForm.length; i++) {
-      partForm[i].disabled = true;
-    }
-  };
-
-  // Удаляет из 'ad-form' input и select disabled
-  var activateInputForm = function () {
-    activatePartForm(formInput);
-    activatePartForm(formSelect);
-    activatePartForm(formTextarea);
-    activatePartForm(formButton);
-  };
-
-  var activatePartForm = function (partForm) {
-    for (var i = 0; i < partForm.length; i++) {
-      partForm[i].disabled = false;
-    }
-  };
 
   window.utils.showAddress();
   disableInputForm();
+  disableFilterForm();
 
   // Обработчик открытия окна по Enter
   var onOpenMapEnterPress = function (evt) {
@@ -170,11 +199,32 @@
   // Активирует метку при нажатие Enter
   buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
 
-  var onLoadForm = function () {
-    disableInputForm();
-    map.classList.add('map--faded');
+  var resetForm = function () {
+    if (window.map.openCardStatus) {
+      closePopup();
+    }
+    window.data.flagOpenMap = false;
 
+
+    disableInputForm();
+    disableFilterForm();
+    window.pin.renderPins([]);
+
+    buttonPinMain.style.left = PIN_MAIN.X;
+    buttonPinMain.style.top = PIN_MAIN.Y;
+
+    form.reset();
+    formFilters.reset();
+
+    window.utils.showAddress();
+    map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
+
+  };
+
+  // Успешная отправка форм
+  var onLoadForm = function () {
+    resetForm();
 
   };
 
