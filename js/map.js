@@ -241,13 +241,7 @@
 
   var onSuccessLoadClickOutPress = function (evt) {
     var targetSuccess = evt.target.closest('.success');
-
     console.log('evt=', evt, 'evt.targey=', targetSuccess);
-    
-    if (targetSuccess === '.success') {
-      console.log('Работает');
-
-    }
   };
 
   // Успешная отправка форм
@@ -265,8 +259,6 @@
 
     // Слушатель по клику вне окна
     document.addEventListener('click', onSuccessLoadClickOutPress);
-    console.log('Запустил');
-
   };
 
   var onErrorForm = function () {
