@@ -2,7 +2,7 @@
 
 (function () {
   var URL_DATA = 'https://js.dump.academy/keksobooking/data';
-  var URL_FORM = 'https://js.dump.academy/keksobooking1';
+  var URL_FORM = 'https://js.dump.academy/keksobooking';
 
   var mapPinActive;
   var PIN_MAIN = {};

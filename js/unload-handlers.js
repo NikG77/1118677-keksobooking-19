@@ -2,8 +2,6 @@
 // Обработка успешной и неуспешной отправки формы
 (function () {
   var main = document.querySelector('main');
-  var errorButton;
-
 
   // Закрытие окна успешной загрузки
   var closePopupSuccessLoad = function () {
@@ -17,7 +15,6 @@
     document.querySelector('.error').remove();
     document.removeEventListener('keydown', onErrorLoadEscPress);
     document.removeEventListener('click', onErrorLoadClickOutPress);
-    // errorButton.removeEventListener('click', onErrorLoadEnterPress);
   };
 
   // Обработчик закрытия окна при неуспешной загрузки по ESC
@@ -33,17 +30,6 @@
       closePopupErrorLoad();
     }
   };
-
-
-  // Обработчик закрытия окна при неуспешной загрузки по Enter
-  var onErrorLoadEnterPress = function (evt) {
-    evt.preventDefault();
-    console.log('закрываем по enter');
-    closePopupErrorLoad();
-
-    // window.utils.isEnterEvent(evt, closePopupErrorLoad);
-  };
-
 
   // Обработчик закрытия окна успешной загрузки по ESC
   var onSuccessLoadEscPress = function (evt) {
@@ -87,9 +73,9 @@
     // Слушатель по клику
     document.addEventListener('click', onErrorLoadClickOutPress);
 
-    errorButton = document.querySelector('.error__button');
+    var errorButton = document.querySelector('.error__button');
     // Слушатель по Enter на поле
-    errorButton.addEventListener('click', onErrorLoadEnterPress);
+    errorButton.addEventListener('click', closePopupErrorLoad);
   };
 
   window.unloadhandlers = {
