@@ -2,8 +2,7 @@
 
 (function () {
   var URL_DATA = 'https://js.dump.academy/keksobooking/data';
-  var URL_FORM = 'https://js.dump.academy/keksobooking';
-
+  var URL_FORM = 'https://js.dump.academy/keksobooking1';
 
   var mapPinActive;
   var PIN_MAIN = {};
@@ -13,14 +12,11 @@
 
   var form = document.querySelector('.ad-form');
   var formFieldset = document.querySelectorAll('.fieldset');
-  // var formSelect = form.querySelectorAll('select');
-  // var formTextarea = form.querySelector('textarea');
   var formButton = form.querySelectorAll('.ad-form__submit');
 
   var formFilters = document.querySelector('.map__filters');
   var formFiltersSelect = formFilters.querySelectorAll('select');
   var formFiltersFieldset = formFilters.querySelector('fieldset');
-
 
   // Добавляет в form .map__filters всем select и fieldset disabled
   var disableFilterForm = function () {
@@ -36,10 +32,6 @@
 
   // Добавляет в 'ad-form' всем  input и select disabled
   var disableInputForm = function () {
-    // disablePartForm(formInput);
-    // disablePartForm(formSelect);
-    // disablePartForm(formTextarea);
-    // disablePartForm(formButton);
     disablePartForm(formFieldset);
   };
 
@@ -51,10 +43,6 @@
 
   // Удаляет из 'ad-form' fieldset disabled
   var activateInputForm = function () {
-    // activatePartForm(formInput);
-    // activatePartForm(formSelect);
-    // activatePartForm(formTextarea);
-    // activatePartForm(formButton);
     activatePartForm(formFieldset);
   };
 
@@ -164,15 +152,15 @@
     PIN_MAIN.Y = buttonPinMain.style.top;
 
     // Обработчики закрытия окна - не оставляю из-за повторного открытия
-    // buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
-    // buttonPinMain.removeEventListener('mousedown', onOpenMapMouseMainClick);
+    buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
+    buttonPinMain.removeEventListener('mousedown', onOpenMapMouseMainClick);
   };
 
-  // Активирует карточку объявления при клике на метку на блок map__pins через делегирование
+  // Слушаем карточку объявления при клике на метку на блок map__pins через делегирование
   var setupOpenCard = map.querySelector('.map__pins');
   setupOpenCard.addEventListener('click', showCard);
 
-  // Активирует карточку объявления пo tab
+  // Слушаем карточку объявления пo tab
   setupOpenCard.addEventListener('keydown', function (evt) {
     window.utils.isEnterEvent(evt, showCard);
   });
@@ -187,23 +175,24 @@
     window.utils.isEnterEvent(evt, openMap);
   };
 
-  // Обработчик открытия окна по Enter
+  // Обработчик открытия окна по сlick
   var onOpenMapMouseMainClick = function (evt) {
     window.utils.isMouseMainClickEvent(evt, openMap);
   };
 
-  // Активирует метку при нажатие основной кнопки мыши
+  // Слушает метку при нажатие основной кнопки мыши
   buttonPinMain.addEventListener('mousedown', onOpenMapMouseMainClick);
 
-  // Активирует метку при нажатие Enter
+  // Слушает метку при нажатие Enter
   buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
 
+  // Сбрасывает форму и все данные
   var resetForm = function () {
     if (window.map.openCardStatus) {
       closePopup();
     }
     window.data.flagOpenMap = false;
-    // Перезаписываем изначальный аватар
+    // Перезаписыват изначальный аватар
     document.querySelector('.ad-form-header__preview img').src = 'img/muffin-grey.svg';
 
     var preview = document.querySelector('.ad-form__photo');
@@ -213,69 +202,46 @@
       preview.removeChild(element);
     });
 
-    disableInputForm();
-    disableFilterForm();
-    window.pin.renderPins([]);
-
     buttonPinMain.style.left = PIN_MAIN.X;
     buttonPinMain.style.top = PIN_MAIN.Y;
 
     form.reset();
     formFilters.reset();
 
+    disableInputForm();
+    disableFilterForm();
+    window.pin.renderPins([]);
+
     window.utils.showAddress();
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
-  };
 
-  var closePopupSuccessLoad = function () {
-    document.querySelector('.success').remove();
-    document.removeEventListener('keydown', onSuccessLoadEscPress);
-    document.removeEventListener('click', onSuccessLoadClickOutPress);
+    // Слушает метку при нажатие основной кнопки мыши
+    buttonPinMain.addEventListener('mousedown', onOpenMapMouseMainClick);
 
-  };
-
-  var onSuccessLoadEscPress = function (evt) {
-    window.utils.isEscEvent(evt, closePopupSuccessLoad);
-  };
-
-  var onSuccessLoadClickOutPress = function (evt) {
-    var targetSuccess = evt.target.closest('.success');
-    console.log('evt=', evt, 'evt.targey=', targetSuccess);
-  };
-
-  // Успешная отправка форм
-  var onLoadForm = function () {
-    resetForm();
-
-    // Выводит по шаблону сообщение об успешной отправки формы
-    var successTemplate = document.querySelector('#success').content;
-    var main = document.querySelector('main');
-    var successElement = successTemplate.cloneNode(true);
-    main.appendChild(successElement);
-
-    // Слушатель на закрытие сообщения успешной отправки
-    document.addEventListener('keydown', onSuccessLoadEscPress);
-
-    // Слушатель по клику вне окна
-    document.addEventListener('click', onSuccessLoadClickOutPress);
-  };
-
-  var onErrorForm = function () {
-
-
+    // Слушает метку при нажатие Enter
+    buttonPinMain.addEventListener('keydown', onOpenMapEnterPress);
   };
 
   // Обработчик отправки формы
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
     formButton.textContent = 'Данные отправляются ...';
-    window.backend.save(URL_FORM, new FormData(form), onLoadForm, onErrorForm);
+    window.backend.save(URL_FORM, new FormData(form), window.unloadhandlers.onLoadForm, window.unloadhandlers.onErrorForm);
 
   });
 
+  var formReset = form.querySelector('.ad-form__reset');
+  // Обработчик сброса формы
+  formReset.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    resetForm();
+  });
+
+
   window.map = {
     closePopup: closePopup,
+    resetForm: resetForm,
     openCardStatus: false,
     addressData: [],
     addressDataCopy: [],
