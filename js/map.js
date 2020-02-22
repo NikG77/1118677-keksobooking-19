@@ -5,18 +5,21 @@
   var URL_FORM = 'https://js.dump.academy/keksobooking';
 
   var mapPinActive;
-  var PIN_MAIN = {};
+  var PIN_MAIN = {
+    X: '570px',
+    Y: '375px'
+  };
 
   var map = document.querySelector('.map');
   var buttonPinMain = map.querySelector('.map__pin--main');
 
   var form = document.querySelector('.ad-form');
-  var formFieldset = document.querySelectorAll('.fieldset');
+  var formFieldset = form.querySelectorAll('fieldset');
   var formButton = form.querySelectorAll('.ad-form__submit');
 
   var formFilters = document.querySelector('.map__filters');
   var formFiltersSelect = formFilters.querySelectorAll('select');
-  var formFiltersFieldset = formFilters.querySelector('fieldset');
+  var formFiltersFieldset = formFilters.querySelectorAll('fieldset');
 
   // Добавляет в form .map__filters всем select и fieldset disabled
   var disableFilterForm = function () {
@@ -148,8 +151,8 @@
     window.utils.showAddress();
 
     // Запоминаем расположение основной метки
-    PIN_MAIN.X = buttonPinMain.style.left;
-    PIN_MAIN.Y = buttonPinMain.style.top;
+    // PIN_MAIN.X = buttonPinMain.style.left;
+    // PIN_MAIN.Y = buttonPinMain.style.top;
 
     // Обработчики закрытия окна - не оставляю из-за повторного открытия
     buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
@@ -164,11 +167,6 @@
   setupOpenCard.addEventListener('keydown', function (evt) {
     window.utils.isEnterEvent(evt, showCard);
   });
-
-
-  window.utils.showAddress();
-  disableInputForm();
-  disableFilterForm();
 
   // Обработчик открытия окна по Enter
   var onOpenMapEnterPress = function (evt) {
@@ -238,6 +236,9 @@
     resetForm();
   });
 
+  window.utils.showAddress();
+  disableInputForm();
+  disableFilterForm();
 
   window.map = {
     closePopup: closePopup,
