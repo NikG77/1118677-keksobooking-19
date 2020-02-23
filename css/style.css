@@ -614,9 +614,9 @@ fieldset {
   border-radius: 4px;
 }
 
-.ad-form__element input:hover,
-.ad-form__element select:hover,
-.ad-form__element textarea:hover {
+.ad-form__element input:not(:disabled):hover,
+.ad-form__element select:not(:disabled):hover,
+.ad-form__element textarea:not(:disabled):hover {
   border-color: #ffaa99;
 }
 
@@ -850,7 +850,7 @@ fieldset {
   border-radius: 8px;
 }
 
-.ad-form__submit:hover,
+.ad-form__submit:not(:disabled):hover,
 .ad-form__submit:focus {
   border-color: #ff6d51;
 }
