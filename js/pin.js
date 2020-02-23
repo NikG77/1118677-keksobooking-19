@@ -29,10 +29,10 @@
     renderPins: function (data) {
       var similarPinElement = document.querySelector('.map').querySelector('.map__pins');
       var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-      for (var j = 0; j < mapPins.length; j++) {
-        similarPinElement.removeChild(mapPins[j]);
-      }
+      // Удаляет старые метки из разметки
+      mapPins.forEach(function (mapPin) {
+        similarPinElement.removeChild(mapPin);
+      });
 
       var fragment = document.createDocumentFragment();
       for (var i = 0; i < data.length; i++) {
