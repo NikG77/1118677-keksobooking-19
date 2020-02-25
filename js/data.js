@@ -6,7 +6,7 @@
     NUMBER_PIN_SHOW: 5,
 
     // Для "переводчика"
-    typeHouse: {
+    typeHouseListMap: {
       palace: 'Дворец',
       flat: 'Квартира',
       house: 'Дом',
