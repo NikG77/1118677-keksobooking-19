@@ -6,15 +6,15 @@
   var filterPriceOfHouse = filters.querySelector('#housing-price');
   var filterRoomsOfHouse = filters.querySelector('#housing-rooms');
   var filterGuestOfHouse = filters.querySelector('#housing-guests');
-  // var filterFeaturesOfHouse = filters.querySelector('#housing-features');
+  var filterFeaturesOfHouse = filters.querySelector('#housing-features');
 
   // Фильтрация по типу жилья
   filters.addEventListener('change', function () {
-
+    // для проверки вывожу временные данные
+    // console.log(window.map.addressData);
     window.map.addressData.forEach(function (item) {
       console.log(item.offer.guests);
     });
-
 
     if (window.map.openCardStatus) {
       window.map.closePopup();
@@ -48,11 +48,12 @@
       return filterRoomsOfHouse.value === 'any';
     });
 
-    console.log('До фильтра guests', filterGuestOfHouse.value, window.map.addressDataCopy);
-
+    // фильтр по кол-ву гостей
     window.map.addressDataCopy = window.map.addressDataCopy.filter(function (data) {
       console.log('Внутри guests', filterGuestOfHouse.value, data.offer.guests);
       if (+filterGuestOfHouse.value === +data.offer.guests) {
+        console.log('Выполнилось при', filterGuestOfHouse.value, data.offer.guests);
+
         return data.offer.guests;
       }
       return filterGuestOfHouse.value === 'any';
@@ -64,3 +65,17 @@
   });
 
 })();
+
+/*
+    console.log('До фильтра features', filterFeaturesOfHouse.querySelectorAll('input:checked'), window.map.addressDataCopy);
+    var filterFeaturesChecked = filterFeaturesOfHouse.querySelectorAll('input:checked');
+
+    // Фильтр по удобствам
+    window.map.addressDataCopy = window.map.addressDataCopy.filter(function (data) {
+      // console.log('Внутри guests', filterFeaturesOfHouse.value, data.offer.guests);
+      if (+filterFeaturesOfHouse.value === +data.offer.feature) {
+        return data.offer.guests;
+      }
+      return filterFeaturesChecked.value;
+    });
+    */
