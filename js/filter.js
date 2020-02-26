@@ -1,6 +1,11 @@
 'use strict';
 // Фильтры
 (function () {
+  var PRICE_MIDLE = {
+    MIN: 10000,
+    MAX: 50000,
+  };
+
   var filters = document.querySelector('.map__filters');
   var filterTypeOfHouse = filters.querySelector('#housing-type');
   var filterPriceOfHouse = filters.querySelector('#housing-price');
@@ -8,8 +13,10 @@
   var filterGuestOfHouse = filters.querySelector('#housing-guests');
   var filterFeaturesOfHouse = filters.querySelector('#housing-features');
 
-  // Фильтрация по типу жилья
-  filters.addEventListener('change', function () {
+  var updateFilters = function () {
+    var filterFeaturesChecked = filterFeaturesOfHouse.querySelectorAll('input[type="checkbox"]:checked');
+
+    // Фильтрация по типу жилья
     if (window.map.openCardStatus) {
       window.map.closePopup();
     }
@@ -23,11 +30,11 @@
 
     // Фильтр по цене
     window.map.addressDataCopy = window.map.addressDataCopy.filter(function (data) {
-      if (filterPriceOfHouse.value === 'middle' && data.offer.price >= 10000 && data.offer.price < 50000) {
+      if (filterPriceOfHouse.value === 'middle' && data.offer.price >= PRICE_MIDLE.MIN && data.offer.price < PRICE_MIDLE.MAX) {
         return true;
-      } else if (filterPriceOfHouse.value === 'low' && data.offer.price < 10000) {
+      } else if (filterPriceOfHouse.value === 'low' && data.offer.price < PRICE_MIDLE.MIN) {
         return true;
-      } else if (filterPriceOfHouse.value === 'high' && data.offer.price >= 50000) {
+      } else if (filterPriceOfHouse.value === 'high' && data.offer.price >= PRICE_MIDLE.MAX) {
         return true;
       }
       return filterPriceOfHouse.value === 'any';
@@ -49,21 +56,13 @@
       return filterGuestOfHouse.value === 'any';
     });
 
-
-    var filterFeaturesChecked = (filterFeaturesOfHouse.querySelectorAll('input[type="checkbox"]:checked'));
-
-    // Проверяет наличие feature в массиве данных
-    var checkFeature = function (array, feature) {
-      return array.some(function (item) {
-        return item === feature;
-      });
-    };
-
     // Фильтр по удобствам
     window.map.addressDataCopy = window.map.addressDataCopy.filter(function (data) {
       var resultOfChecking = true;
       for (var i = 0; i < filterFeaturesChecked.length; i++) {
-        resultOfChecking = checkFeature(data.offer.features, filterFeaturesChecked[i].value);
+        resultOfChecking = data.offer.features.some(function (item) {
+          return item === filterFeaturesChecked[i].value;
+        });
         if (!resultOfChecking) {
           break;
         }
@@ -71,10 +70,13 @@
       return resultOfChecking;
     });
 
-
-    // console.log('На выходе', window.map.addressDataCopy);
     window.pin.renderPins(window.map.addressDataCopy.slice(0, window.data.NUMBER_PIN_SHOW));
+  };
 
+  var onSelectFilters = window.debounce(function () {
+    updateFilters();
   });
+
+  filters.addEventListener('change', onSelectFilters);
 
 })();
