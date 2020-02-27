@@ -20,9 +20,10 @@
   var inputTimeIn = form.querySelector('#timein');
   var inputTimeOut = form.querySelector('#timeout');
 
-  // Проверка кастомной валидации на input
+
   form.addEventListener('change', function (evt) {
     evt.preventDefault();
+    // Валидации по типу жилья
     if (+roomNumber.value === 1 && +roomNumber.value !== +capacityPeople.value) {
       roomNumber.setCustomValidity('Допустимо 1 комната — «для 1 гостя»');
     } else if (+roomNumber.value === 2 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === NO_GUESTS)) {
@@ -34,15 +35,26 @@
     } else {
       roomNumber.setCustomValidity('');
     }
+
+    // Валидация заголовка объявления
+    if (inputTitle.validity.tooShort) {
+      inputTitle.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов, но не более 100 символов');
+    } else if (inputTitle.validity.tooLong) {
+      inputTitle.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
+    } else if (inputTitle.validity.valueMissing) {
+      inputTitle.setCustomValidity('Заголовок объявления - обязательное поле для заполнения и должен состоять минимум из 30 символов, но не более 100 символов');
+    } else {
+      inputTitle.setCustomValidity('');
+    }
   });
 
-  // Проверка соответсвия типа жилья и цены
+  // Настройка соответсвия типа жилья и цены
   inputTypeHouse.addEventListener('input', function () {
     inputPrice.placeholder = minAvailablePrice[inputTypeHouse.value];
     inputPrice.min = minAvailablePrice[inputTypeHouse.value];
   });
 
-  // Проверка соответсвия времени въезда выезда
+  // Настройка соответсвия времени въезда выезда
   inputTimeIn.addEventListener('input', function () {
     inputTimeOut.value = inputTimeIn.value;
   });
@@ -51,20 +63,7 @@
     inputTimeIn.value = inputTimeOut.value;
   });
 
-  // Валидация Заголовка объявления
-  inputTitle.addEventListener('input', function (evt) {
-    evt.preventDefault();
-    if (inputTitle.validity.tooShort) {
-      inputTitle.setCustomValidity('Имя должно состоять минимум из 30-х символов, но не более 100-ти символов ');
-    } else if (inputTitle.validity.tooLong) {
-      inputTitle.setCustomValidity('Имя не должно превышать 100-ти символов');
-    } else if (inputTitle.validity.valueMissing) {
-      inputTitle.setCustomValidity('Обязательное поле для заполнения');
-    } else {
-      inputTitle.setCustomValidity('');
-    }
-  });
-
+  // Перед готовностью удалить
   inputTitle.value = 'Временно чтоб постоянно не забивать данные при проверки валидации';
 
 })();
