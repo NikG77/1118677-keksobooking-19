@@ -17,29 +17,44 @@
   var updateFilters = function () {
     var filterFeaturesChecked = filterFeaturesOfHouse.querySelectorAll('input[type="checkbox"]:checked');
 
-    // Фильтрация по типу жилья
+    // Закрываем объявление. если оно открыто
     if (window.map.openCardStatus) {
       window.map.closePopup();
     }
 
     // Фильтрация по типу жилья
     var filterByType = function (data) {
-      return filterTypeOfHouse.value === 'any' ? true : filterTypeOfHouse.value === data.offer.type;
+      return filterTypeOfHouse.value === 'any' || filterTypeOfHouse.value === data.offer.type;
+    };
+
+    // Проверка на соответсвия low цене
+    var checkMinPrice = function (data) {
+      return filterPriceOfHouse.value === 'low' && data.offer.price < PRICE_MIDLE.MIN;
+    };
+
+    // Проверка на соответсвиt middle цене
+    var checkMiddlePrice = function (data) {
+      return filterPriceOfHouse.value === 'middle' && data.offer.price >= PRICE_MIDLE.MIN && data.offer.price < PRICE_MIDLE.MAX;
+    };
+
+    // Проверка на соответсвиt high цене
+    var checkHighPrice = function (data) {
+      return filterPriceOfHouse.value === 'high' && data.offer.price >= PRICE_MIDLE.MAX;
     };
 
     // Фильтр по цене
     var filterByPrice = function (data) {
-      return filterPriceOfHouse.value === 'any' ? true : ((filterPriceOfHouse.value === 'middle' && data.offer.price >= PRICE_MIDLE.MIN && data.offer.price < PRICE_MIDLE.MAX) || (filterPriceOfHouse.value === 'low' && data.offer.price < PRICE_MIDLE.MIN) || (filterPriceOfHouse.value === 'high' && data.offer.price >= PRICE_MIDLE.MAX));
+      return filterPriceOfHouse.value === 'any' || checkMiddlePrice(data) || checkMinPrice(data) || checkHighPrice();
     };
 
     // Фильтр по числу комнат
     var filterByRoom = function (data) {
-      return filterRoomsOfHouse.value === 'any' ? true : +filterRoomsOfHouse.value === +data.offer.rooms;
+      return filterRoomsOfHouse.value === 'any' || +filterRoomsOfHouse.value === +data.offer.rooms;
     };
 
     // фильтр по кол-ву гостей
     var filterByGuest = function (data) {
-      return filterGuestOfHouse.value === 'any' ? true : +filterGuestOfHouse.value === +data.offer.guests;
+      return filterGuestOfHouse.value === 'any' || +filterGuestOfHouse.value === +data.offer.guests;
     };
 
     // Фильтр по удобствам
