@@ -57,9 +57,7 @@
     };
 
     window.map.addressDataCopy = window.map.addressData.filter(function (data) {
-      if (filterByType(data) && filterByPrice(data) && filterByRoom(data) && filterByGuest(data) && filterByFeatures(data)) {
-        return true;
-      }
+      return filterByType(data) && filterByPrice(data) && filterByRoom(data) && filterByGuest(data) && filterByFeatures(data) ? true : false;
     });
 
     window.pin.renderPins(window.map.addressDataCopy.slice(0, window.data.NUMBER_PIN_SHOW));
