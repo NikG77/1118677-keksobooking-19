@@ -150,10 +150,6 @@
     activateInputForm();
     window.utils.showAddress();
 
-    // Запоминаем расположение основной метки
-    // PIN_MAIN.X = buttonPinMain.style.left;
-    // PIN_MAIN.Y = buttonPinMain.style.top;
-
     // Обработчики закрытия окна - не оставляю из-за повторного открытия
     buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
     buttonPinMain.removeEventListener('mousedown', onOpenMapMouseMainClick);
@@ -205,6 +201,11 @@
 
     form.reset();
     formFilters.reset();
+
+    var inputTypeHouse = form.querySelector('#type');
+    var inputPrice = form.querySelector('#price');
+    // После reset присватваю placeholder нужное значение
+    inputPrice.placeholder = window.data.minAvailablePrice[inputTypeHouse.value];
 
     disableInputForm();
     disableFilterForm();

@@ -16,17 +16,18 @@
   buttonPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    // Ограничает размеры согласно мин максимальным и размера смещения
+    var pinMainX;
+    var pinMainY;
+
+    // Ограничает размеры x согласно мин макс и размера смещения
     var limitSize = function (x, min, max, offset) {
       var minX = min - offset;
       var maxX = max - offset;
-      var newX;
+      var newX = x;
       if (x < minX) {
         newX = minX;
       } else if (x > maxX) {
         newX = maxX;
-      } else {
-        newX = x;
       }
       return newX;
     };
@@ -49,11 +50,11 @@
         y: moveEvt.clientY
       };
 
-      var PinMainX = limitSize(buttonPinMain.offsetLeft - shift.x, LIMIT.MIN_X, LIMIT.MAX_X, offsetX);
-      var PinMainY = limitSize(buttonPinMain.offsetTop - shift.y, LIMIT.MIN_Y, LIMIT.MAX_Y, offsetY);
+      pinMainX = limitSize(buttonPinMain.offsetLeft - shift.x, LIMIT.MIN_X, LIMIT.MAX_X, offsetX);
+      pinMainY = limitSize(buttonPinMain.offsetTop - shift.y, LIMIT.MIN_Y, LIMIT.MAX_Y, offsetY);
 
-      buttonPinMain.style.top = PinMainY + 'px';
-      buttonPinMain.style.left = PinMainX + 'px';
+      buttonPinMain.style.top = pinMainY + 'px';
+      buttonPinMain.style.left = pinMainX + 'px';
 
       window.utils.showAddress();
     };

@@ -29,56 +29,18 @@
       var buttonPinMain = map.querySelector('.map__pin--main');
       var offsetX = buttonPinMain.offsetWidth / 2;
       var offsetY = buttonPinMain.offsetHeight;
+      var pinMainX;
+      var pinMainY;
 
       if (!window.data.flagOpenMap) {
         offsetY = buttonPinMain.offsetHeight / 2;
       }
 
-      var PinMainX = Math.floor(buttonPinMain.offsetLeft + offsetX);
-      var PinMainY = Math.round(buttonPinMain.offsetTop + offsetY);
+      pinMainX = Math.floor(buttonPinMain.offsetLeft + offsetX);
+      pinMainY = Math.floor(buttonPinMain.offsetTop + offsetY);
 
-      document.querySelector('#address').value = PinMainX + ', ' + PinMainY;
-    },
-    // Спрятать элемент, добавив класс  'hidden'
-    hideElement: function (hideClass) {
-      document.querySelector(hideClass).classList.add('hidden');
+      document.querySelector('#address').value = pinMainX + ', ' + pinMainY;
     },
 
-    // Показать элемент, убрав класс  'hidden'
-    showElement: function (showClass) {
-      document.querySelector(showClass).classList.remove('hidden');
-    },
-
-    // Выдает рандомное число в диапозоне от minNumber до maxNumber
-    getRandomRange: function (minNumber, maxNumber) {
-      return Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
-    },
-
-    // Выдает на основе входящего массива один рандомный элемент массива
-    getRandomElement: function (arr) {
-      var numberRandom = window.utils.getRandomRange(0, arr.length - 1);
-      return arr[numberRandom];
-    },
-
-    // Выдает на основе входящего массива массив с рандомным кол-вом элементов
-    getRandomArray: function (arr) {
-      var numberRandom = window.utils.getRandomRange(0, arr.length);
-      var arrClon = arr.slice();
-      var arrNew = [];
-      var numberArrRandom;
-
-      for (var j = 0; j < numberRandom; j++) {
-        numberArrRandom = window.utils.getRandomRange(0, arrClon.length - 1);
-        arrNew[j] = arrClon[numberArrRandom];
-        arrClon.splice(numberArrRandom, 1);
-      }
-      return arrNew;
-    },
-
-    // Выдает рандомный ключ объекта
-    getRandomObject: function (obj) {
-      var array = Object.keys(obj);
-      return window.utils.getRandomElement(array);
-    },
   };
 })();

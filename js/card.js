@@ -34,7 +34,7 @@
       addressElement.querySelector('.popup__title').textContent = addressObject.offer.title;
       addressElement.querySelector('.popup__text--address').textContent = addressObject.offer.address;
       addressElement.querySelector('.popup__text--price').textContent = addressObject.offer.price + '₽/ночь';
-      addressElement.querySelector('.popup__type').textContent = window.data.typeHouse[addressObject.offer.type];
+      addressElement.querySelector('.popup__type').textContent = window.data.typeHouseListMap[addressObject.offer.type];
       addressElement.querySelector('.popup__text--capacity').textContent = addressObject.offer.rooms + ' комнаты для ' + addressObject.offer.guests + ' гостей';
       addressElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + addressObject.offer.checkin + ', выезд до ' + addressObject.offer.checkout;
       addressElement.querySelector('.popup__description').textContent = addressObject.offer.description;
