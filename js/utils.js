@@ -29,17 +29,17 @@
       var buttonPinMain = map.querySelector('.map__pin--main');
       var offsetX = buttonPinMain.offsetWidth / 2;
       var offsetY = buttonPinMain.offsetHeight;
-      var PinMainX;
-      var PinMainY;
+      var pinMainX;
+      var pinMainY;
 
       if (!window.data.flagOpenMap) {
         offsetY = buttonPinMain.offsetHeight / 2;
       }
 
-      PinMainX = Math.floor(buttonPinMain.offsetLeft + offsetX);
-      PinMainY = Math.floor(buttonPinMain.offsetTop + offsetY);
+      pinMainX = Math.floor(buttonPinMain.offsetLeft + offsetX);
+      pinMainY = Math.floor(buttonPinMain.offsetTop + offsetY);
 
-      document.querySelector('#address').value = PinMainX + ', ' + PinMainY;
+      document.querySelector('#address').value = pinMainX + ', ' + pinMainY;
     },
 
   };

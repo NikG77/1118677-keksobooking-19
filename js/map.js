@@ -150,10 +150,6 @@
     activateInputForm();
     window.utils.showAddress();
 
-    // Запоминаем расположение основной метки
-    // PIN_MAIN.X = buttonPinMain.style.left;
-    // PIN_MAIN.Y = buttonPinMain.style.top;
-
     // Обработчики закрытия окна - не оставляю из-за повторного открытия
     buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
     buttonPinMain.removeEventListener('mousedown', onOpenMapMouseMainClick);
