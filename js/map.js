@@ -206,6 +206,11 @@
     form.reset();
     formFilters.reset();
 
+    var inputTypeHouse = form.querySelector('#type');
+    var inputPrice = form.querySelector('#price');
+    // После reset присватваю placeholder нужное значение
+    inputPrice.placeholder = window.data.minAvailablePrice[inputTypeHouse.value];
+
     disableInputForm();
     disableFilterForm();
     window.pin.renderPins([]);

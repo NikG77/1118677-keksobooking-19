@@ -4,13 +4,6 @@
   var NOT_FOR_GUESTS_ROOMS = 100;
   var NO_GUESTS = 0;
 
-  var minAvailablePrice = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
-  };
-
   var form = document.querySelector('.ad-form');
   var roomNumber = form.querySelector('#room_number');
   var capacityPeople = form.querySelector('#capacity');
@@ -50,8 +43,8 @@
 
   // Настройка соответсвия типа жилья и цены
   inputTypeHouse.addEventListener('input', function () {
-    inputPrice.placeholder = minAvailablePrice[inputTypeHouse.value];
-    inputPrice.min = minAvailablePrice[inputTypeHouse.value];
+    inputPrice.min = window.data.minAvailablePrice[inputTypeHouse.value];
+    inputPrice.placeholder = window.data.minAvailablePrice[inputTypeHouse.value];
   });
 
   // Настройка соответсвия времени въезда выезда
@@ -64,6 +57,6 @@
   });
 
   // Перед готовностью удалить
-  inputTitle.value = 'Временно чтоб постоянно не забивать данные при проверки валидации';
+  // inputTitle.value = 'Временно чтоб постоянно не забивать данные при проверки валидации';
 
 })();

@@ -13,6 +13,14 @@
       bungalo: 'Бунгало'
     },
 
+    // Минимальные цены для типов жилья
+    minAvailablePrice: {
+      bungalo: 0,
+      flat: 1000,
+      house: 5000,
+      palace: 10000
+    },
+
     // Флаг активно окно или нет
     flagOpenMap: false,
   };
