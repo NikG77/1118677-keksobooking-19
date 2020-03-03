@@ -2,16 +2,16 @@
 
 // Перемещение основной метки
 (function () {
-  var map = document.querySelector('.map');
-  var buttonPinMain = map.querySelector('.map__pin--main');
-  var offsetX = buttonPinMain.offsetWidth / 2;
-  var offsetY = buttonPinMain.offsetHeight;
   var LIMIT = {
     MIN_X: 0,
     MAX_X: 1200,
     MIN_Y: 130,
     MAX_Y: 630
   };
+  var map = document.querySelector('.map');
+  var buttonPinMain = map.querySelector('.map__pin--main');
+  var offsetX = buttonPinMain.offsetWidth / 2;
+  var offsetY = buttonPinMain.offsetHeight;
 
   buttonPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();

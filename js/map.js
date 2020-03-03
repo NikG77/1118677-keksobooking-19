@@ -3,12 +3,12 @@
 (function () {
   var URL_DATA = 'https://js.dump.academy/keksobooking/data';
   var URL_FORM = 'https://js.dump.academy/keksobooking';
-
-  var mapPinActive;
   var PIN_MAIN = {
     X: '570px',
     Y: '375px'
   };
+
+  var mapPinActive;
 
   var map = document.querySelector('.map');
   var buttonPinMain = map.querySelector('.map__pin--main');
