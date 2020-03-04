@@ -8,7 +8,7 @@
   var preview = document.querySelector('.ad-form__photo');
 
   var i = 1;
-  var newElementImg = [];
+  var newElementImages = [];
 
   fileChooser.addEventListener('change', function () {
 
@@ -22,13 +22,13 @@
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        newElementImg[i] = document.createElement('img');
-        newElementImg[i].dataset.index = i;
-        newElementImg[i].alt = 'Фотография жилья N' + (i);
-        newElementImg[i].width = '60';
-        newElementImg[i].height = '60';
-        newElementImg[i].src = reader.result;
-        preview.appendChild(newElementImg[i]);
+        newElementImages[i] = document.createElement('img');
+        newElementImages[i].dataset.index = i;
+        newElementImages[i].alt = 'Фотография жилья N' + (i);
+        newElementImages[i].width = '60';
+        newElementImages[i].height = '60';
+        newElementImages[i].src = reader.result;
+        preview.appendChild(newElementImages[i]);
         i++;
       });
 

@@ -78,7 +78,7 @@
     errorButton.addEventListener('click', closePopupErrorLoad);
   };
 
-  window.unloadhandlers = {
+  window.unloadHandlers = {
     onLoadForm: onLoadForm,
     onErrorForm: onErrorForm
   };

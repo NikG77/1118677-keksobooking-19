@@ -150,19 +150,19 @@
     activateInputForm();
     window.utils.showAddress();
 
-    // Обработчики закрытия окна - не оставляю из-за повторного открытия
+    // Удаляю обработчики закрытия окна (не оставляю из-за повторного открытия)
     buttonPinMain.removeEventListener('keydown', onOpenMapEnterPress);
     buttonPinMain.removeEventListener('mousedown', onOpenMapMouseMainClick);
   };
 
+  // Обработчик открытия карточки объявления
+  var onMapPinsClick = function (evt) {
+    showCard(evt);
+  };
+
   // Слушаем карточку объявления при клике на метку на блок map__pins через делегирование
   var setupOpenCard = map.querySelector('.map__pins');
-  setupOpenCard.addEventListener('click', showCard);
-
-  // Слушаем карточку объявления пo tab
-  setupOpenCard.addEventListener('keydown', function (evt) {
-    window.utils.isEnterEvent(evt, showCard);
-  });
+  setupOpenCard.addEventListener('click', onMapPinsClick);
 
   // Обработчик открытия окна по Enter
   var onOpenMapEnterPress = function (evt) {
@@ -226,7 +226,7 @@
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
     formButton.textContent = 'Данные отправляются ...';
-    window.backend.save(URL_FORM, new FormData(form), window.unloadhandlers.onLoadForm, window.unloadhandlers.onErrorForm);
+    window.backend.save(URL_FORM, new FormData(form), window.unloadHandlers.onLoadForm, window.unloadHandlers.onErrorForm);
 
   });
 

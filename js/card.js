@@ -18,9 +18,9 @@
   var createPhotos = function (arr, photosTemplate) {
     photosTemplate.querySelector('img').src = arr[0];
     for (var i = 1; i < arr.length; i++) {
-      var newElementImg = photosTemplate.querySelector('img').cloneNode(true);
-      newElementImg.src = arr[i];
-      photosTemplate.appendChild(newElementImg);
+      var newElementImages = photosTemplate.querySelector('img').cloneNode(true);
+      newElementImages.src = arr[i];
+      photosTemplate.appendChild(newElementImages);
     }
   };
 

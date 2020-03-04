@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var TIMEOUT_IN_MS = 10000;
   var StatusCode = {
     OK: 200,
     BAD_REQUEST: 400,
@@ -8,7 +9,6 @@
     NOT_FOUND: 404,
     INTERNAL_STATUS_ERROR: 500
   };
-  var TIMEOUT_IN_MS = 10000;
   var xhr;
 
   // Подготавливает данные к загрузке или отправке и проверяет callback
