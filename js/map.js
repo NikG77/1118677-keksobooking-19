@@ -39,9 +39,9 @@
   };
 
   var disablePartForm = function (partForm) {
-    for (var i = 0; i < partForm.length; i++) {
-      partForm[i].disabled = true;
-    }
+    partForm.forEach(function (data) {
+      data.disabled = true;
+    });
   };
 
   // Удаляет из 'ad-form' fieldset disabled
@@ -50,9 +50,9 @@
   };
 
   var activatePartForm = function (partForm) {
-    for (var i = 0; i < partForm.length; i++) {
-      partForm[i].disabled = false;
-    }
+    partForm.forEach(function (data) {
+      data.disabled = false;
+    });
   };
 
   // Выводит в созданный div информацию об ошибке
@@ -80,12 +80,12 @@
   // с сервера и проверки на наличия св-ва  offer
   var onLoad = function (onloadData) {
     var j = 0;
-    for (var i = 0; i < onloadData.length; i++) {
-      if (onloadData[i]['offer']) {
-        window.map.addressData[j] = onloadData[i];
+    onloadData.forEach(function (data) {
+      if (data['offer']) {
+        window.map.addressData[j] = data;
         j++;
       }
-    }
+    });
 
     // Создает новый массив с заданным кол-вом меток NUMBER_PIN_SHOW
     window.map.addressDataCopy = window.map.addressData.slice();

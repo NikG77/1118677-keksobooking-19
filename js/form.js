@@ -1,8 +1,13 @@
 'use strict';
 
 (function () {
-  var NOT_FOR_GUESTS_ROOMS = 100;
   var NO_GUESTS = 0;
+  var NumberRooms = {
+    ONE: 1,
+    TWO: 2,
+    THREE: 3,
+    NOT_FOR: 100,
+  };
 
   var form = document.querySelector('.ad-form');
   var roomNumber = form.querySelector('#room_number');
@@ -17,13 +22,13 @@
   form.addEventListener('change', function (evt) {
     evt.preventDefault();
     // Валидации по типу жилья
-    if (+roomNumber.value === 1 && +roomNumber.value !== +capacityPeople.value) {
+    if (+roomNumber.value === NumberRooms.ONE && +roomNumber.value !== +capacityPeople.value) {
       roomNumber.setCustomValidity('Допустимо 1 комната — «для 1 гостя»');
-    } else if (+roomNumber.value === 2 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === NO_GUESTS)) {
+    } else if (+roomNumber.value === NumberRooms.TWO && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === NO_GUESTS)) {
       roomNumber.setCustomValidity('Допустимо 2 комнаты — «для 2 гостей» или «для 1 гостя»');
-    } else if (+roomNumber.value === 3 && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === NO_GUESTS)) {
+    } else if (+roomNumber.value === NumberRooms.THREE && (+roomNumber.value < +capacityPeople.value || +capacityPeople.value === NO_GUESTS)) {
       roomNumber.setCustomValidity('Допустимо 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
-    } else if (+roomNumber.value === NOT_FOR_GUESTS_ROOMS && +capacityPeople.value !== NO_GUESTS) {
+    } else if (+roomNumber.value === NumberRooms.NOT_FOR && +capacityPeople.value !== NO_GUESTS) {
       roomNumber.setCustomValidity('Допустимо 100 комнат — «не для гостей»');
     } else {
       roomNumber.setCustomValidity('');

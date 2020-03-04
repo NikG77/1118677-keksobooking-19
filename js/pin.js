@@ -8,21 +8,20 @@
 
   var similarPinTemplate = document.querySelector('#pin').content;
 
-
   // Создает pin с адресом, аватором на img и alt для img
   var createPin = function (address, i) {
     var addressElement = similarPinTemplate.cloneNode(true);
     var locationUnion = 'left: ' + (address.location.x - PIN.WIDTH / 2) + 'px; ' + 'top: ' + (address.location.y - PIN.HEIGHT) + 'px; ';
+    var newPin = addressElement.querySelector('.map__pin');
+    var newPinImg = addressElement.querySelector('img');
 
-    addressElement.querySelector('.map__pin').style = locationUnion;
-    addressElement.querySelector('img').src = address.author.avatar;
-    addressElement.querySelector('img').alt = address.offer.title;
-    addressElement.querySelector('.map__pin').dataset.index = i;
-    // добавляет класс hiden меткам
-    // addressElement.classList.add('hiden');
+    newPin.style = locationUnion;
+    newPinImg.src = address.author.avatar;
+    newPinImg.alt = address.offer.title;
+    newPin.dataset.index = i;
+
     return addressElement;
   };
-
 
   // Выводит в разметку созданные метки
   window.pin = {
@@ -35,9 +34,9 @@
       });
 
       var fragment = document.createDocumentFragment();
-      for (var i = 0; i < data.length; i++) {
-        fragment.appendChild(createPin(data[i], i));
-      }
+      data.forEach(function (element, index) {
+        fragment.appendChild(createPin(element, index));
+      });
       similarPinElement.appendChild(fragment);
     }
   };

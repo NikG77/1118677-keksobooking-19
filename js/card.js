@@ -4,14 +4,14 @@
   var similarCardTemplate = document.querySelector('#card').content;
 
   // Удаляет список дочерних элементы list и cоздает на основе входящего массива arr новый список
-  var createFeature = function (arr, list) {
+  var createFeature = function (features, list) {
     list.innerHTML = '';
-    for (var i = 0; i < arr.length; i++) {
+    features.forEach(function (data) {
       var newElementLi = document.createElement('li');
       newElementLi.classList.add('popup__feature');
-      newElementLi.classList.add('popup__feature--' + arr[i]);
+      newElementLi.classList.add('popup__feature--' + data);
       list.appendChild(newElementLi);
-    }
+    });
   };
 
   // Создает список фотографий из полученного массива
@@ -57,5 +57,3 @@
   };
 
 })();
-
-

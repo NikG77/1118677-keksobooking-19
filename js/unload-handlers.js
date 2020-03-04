@@ -22,13 +22,18 @@
     window.utils.isEscEvent(evt, closePopupErrorLoad);
   };
 
-  // Обработчик закрытия окна при неуспешной загрузки по клику
+  // Обработчик закрытия окна при неуспешной загрузки по клику вне сообщения
   // вне этой области экрана
   var onErrorLoadClickOutPress = function (evt) {
     var targetSuccess = evt.target.closest('.error__message');
     if (!targetSuccess) {
       closePopupErrorLoad();
     }
+  };
+
+  // Обработчик закрытия окна при неуспешной загрузки по клику на button
+  var onErrorButtonClick = function () {
+    closePopupErrorLoad();
   };
 
   // Обработчик закрытия окна успешной загрузки по ESC
@@ -67,15 +72,15 @@
     var errorElement = errorTemplate.cloneNode(true);
     main.appendChild(errorElement);
 
-    // Слушатель на закрытие сообщения успешной отправки
+    // Слушатель на закрытие по ESC сообщения неуспешной отправки
     document.addEventListener('keydown', onErrorLoadEscPress);
 
-    // Слушатель по клику
+    // Слушатель по клику вне поля сообщения
     document.addEventListener('click', onErrorLoadClickOutPress);
 
     var errorButton = document.querySelector('.error__button');
-    // Слушатель по Enter на поле
-    errorButton.addEventListener('click', closePopupErrorLoad);
+    // Слушатель по Enter по button
+    errorButton.addEventListener('click', onErrorButtonClick);
   };
 
   window.unloadHandlers = {
