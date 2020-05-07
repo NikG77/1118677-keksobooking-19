@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var URL_DATA = 'https://js.dump.academy/keksobooking/data';
-  var URL_FORM = 'https://js.dump.academy/keksobooking';
+  var URL_DATA = 'https://javascript.pages.academy/keksobooking/data';
+  var URL_FORM = 'https://javascript.pages.academy/keksobooking';
   var PIN_MAIN = {
     X: '570px',
     Y: '375px'
