@@ -1,4 +1,4 @@
-# Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
+# Личный проект «Кексобукинг»
 
 * Студент: [Georgy Nikitin](https://up.htmlacademy.ru/javascript/19/user/1118677).
 * Наставник: [Сергей Рубец](https://up.htmlacademy.ru/javascript/19/user/41580).
@@ -7,5 +7,3 @@
 
 Репозиторий создан для обучения на интенсивном онлайн‑курсе «[Профессиональный JavaScript](https://htmlacademy.ru/intensive/javascript)», уровень 1 от [HTML Academy](https://htmlacademy.ru).
 
-[travis-image]: https://travis-ci.com/htmlacademy-javascript/1118677-keksobooking-19.svg?branch=master
-[travis-url]: https://travis-ci.com/htmlacademy-javascript/1118677-keksobooking-19
