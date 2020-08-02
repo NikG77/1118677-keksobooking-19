@@ -43,7 +43,7 @@
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения. Нет подключения к Интернету');
+      onError('Произошла ошибка соединения. Нет подключения к серверу');
     });
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
